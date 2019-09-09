@@ -15,6 +15,8 @@ public class TestBot {
 
     public TestBot(HardwareMap hwMap){
 
+        // works
+
         frontLeft = hwMap.dcMotor.get("frontLeft");
         frontRight = hwMap.dcMotor.get("frontRight");
         backLeft = hwMap.dcMotor.get("backLeft");
