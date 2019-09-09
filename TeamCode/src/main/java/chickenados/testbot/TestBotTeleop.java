@@ -19,7 +19,7 @@ public class TestBotTeleop extends LinearOpMode {
 
         while(opModeIsActive()){
 
-
+            //tank drive
             testBot.frontLeft.setPower(gamepad1.left_stick_y);
             testBot.frontRight.setPower(gamepad1.right_stick_y);
             testBot.backLeft.setPower(gamepad1.left_stick_y);
