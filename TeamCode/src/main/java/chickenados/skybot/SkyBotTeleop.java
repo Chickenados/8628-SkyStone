@@ -15,6 +15,8 @@ public class SkyBotTeleop extends LinearOpMode {
     @Override
     public void runOpMode(){
 
+        robot = new CknSkyBot(hardwareMap, telemetry, false);
+
         waitForStart();
 
         while(opModeIsActive()){
