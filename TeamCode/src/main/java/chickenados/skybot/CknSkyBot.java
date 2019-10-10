@@ -1,16 +1,20 @@
-package chickenados.testbot;
+package chickenados.skybot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import chickenlib.CknDriveBase;
 import chickenlib.CknPIDController;
@@ -22,11 +26,18 @@ import chickenlib.opmode.CknRobot;
 import chickenlib.sensor.CknAccelerometer;
 import chickenlib.sensor.CknBNO055IMU;
 
-public class CknTestBot extends CknRobot {
-
+public class CknSkyBot extends CknRobot {
     HardwareMap hwMap;
     private boolean useVuforia;
     private VuforiaLocalizer vuforia;
+
+    //Vuforia Targets
+    VuforiaTrackables skystoneTrackables;
+    VuforiaTrackable stoneTarget;
+    OpenGLMatrix lastLocation = null;
+
+    List<VuforiaTrackable> allTrackables = new ArrayList<>();
+    List<VuforiaTrackable> visibleTrackables = new ArrayList<>();
 
     public CknDriveBase driveBase;
     public CknPIDDrive pidDrive;
@@ -42,13 +53,15 @@ public class CknTestBot extends CknRobot {
     DcMotor rearLeft;
     DcMotor rearRight;
 
+    Servo stoneGrabber;
+
     public CknSmartDashboard dashboard;
 
-    public CknTestBot(HardwareMap hwMap, Telemetry telemetry){
+    public CknSkyBot(HardwareMap hwMap, Telemetry telemetry){
         this(hwMap, telemetry, false);
     }
 
-    public CknTestBot(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia){
+    public CknSkyBot(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia){
 
         this.hwMap = hwMap;
 
@@ -66,10 +79,10 @@ public class CknTestBot extends CknRobot {
         // Initialize Drive Train system
         //
 
-        frontLeft = hwMap.dcMotor.get(CknTestBotInfo.FRONT_LEFT_NAME);
-        frontRight = hwMap.dcMotor.get(CknTestBotInfo.FRONT_RIGHT_NAME);
-        rearLeft = hwMap.dcMotor.get(CknTestBotInfo.REAR_LEFT_NAME);
-        rearRight = hwMap.dcMotor.get(CknTestBotInfo.REAR_RIGHT_NAME);
+        frontLeft = hwMap.dcMotor.get(CknSkyBotInfo.FRONT_LEFT_NAME);
+        frontRight = hwMap.dcMotor.get(CknSkyBotInfo.FRONT_RIGHT_NAME);
+        rearLeft = hwMap.dcMotor.get(CknSkyBotInfo.REAR_LEFT_NAME);
+        rearRight = hwMap.dcMotor.get(CknSkyBotInfo.REAR_RIGHT_NAME);
 
         // Reverse Motors
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -84,11 +97,11 @@ public class CknTestBot extends CknRobot {
 
         CknDriveBase.Parameters params = new CknDriveBase.Parameters();
         params.driveTypes.add(CknDriveBase.DriveType.TANK);
-        //params.driveTypes.add(CknDriveBase.DriveType.ARCADE);
-        //params.driveTypes.add(CknDriveBase.DriveType.MECANUM);
-        params.ticksPerRev = CknTestBotInfo.ENCODER_TICKS_PER_REV;
-        params.gearRatio = CknTestBotInfo.GEAR_RATIO;
-        params.wheelDiameter = CknTestBotInfo.WHEEL_DIAMETER_INCHES;
+        params.driveTypes.add(CknDriveBase.DriveType.ARCADE);
+        params.driveTypes.add(CknDriveBase.DriveType.MECANUM);
+        params.ticksPerRev = CknSkyBotInfo.ENCODER_TICKS_PER_REV;
+        params.gearRatio = CknSkyBotInfo.GEAR_RATIO;
+        params.wheelDiameter = CknSkyBotInfo.WHEEL_DIAMETER_INCHES;
 
         driveBase = new CknDriveBase(frontLeft, frontRight, rearLeft, rearRight, params);
         driveBase.setMode(CknDriveBase.DriveType.TANK);
@@ -122,8 +135,8 @@ public class CknTestBot extends CknRobot {
         yParams.allowOscillation = false;
         yParams.useWraparound = false;
 
-        yPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknTestBotInfo.Y_ENCODER_PID_P,
-                CknTestBotInfo.Y_ENCODER_PID_I, CknTestBotInfo.Y_ENCODER_PID_D),
+        yPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknSkyBotInfo.Y_ENCODER_PID_P,
+                CknSkyBotInfo.Y_ENCODER_PID_I, CknSkyBotInfo.Y_ENCODER_PID_D),
                 new CknLocationInputStream(locationTracker, CknLocationInputStream.InputType.Y_POSITION),
                 yParams);
 
@@ -135,12 +148,22 @@ public class CknTestBot extends CknRobot {
         turnParams.minTarget = 0;
         turnParams.threshold = 2.0;
 
-        turnPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknTestBotInfo.TURN_PID_P,
-                CknTestBotInfo.TURN_PID_I, CknTestBotInfo.TURN_PID_D),
+        turnPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknSkyBotInfo.TURN_PID_P,
+                CknSkyBotInfo.TURN_PID_I, CknSkyBotInfo.TURN_PID_D),
                 new CknLocationInputStream(locationTracker, CknLocationInputStream.InputType.HEADING),
                 turnParams);
 
         pidDrive = new CknPIDDrive(driveBase, yPid, turnPid);
+
+
+        //
+        // Servo Grabber Arm Subsystem
+        //
+        //stoneGrabber = hwMap.servo.get(CknSkyBotInfo.STONE_GRABBER_NAME);
+
+        if(useVuforia){
+            initVuforia();
+        }
 
     }
 
@@ -154,10 +177,10 @@ public class CknTestBot extends CknRobot {
         //Use only if using phone camera
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
-        parameters.vuforiaLicenseKey = CknTestBotInfo.VUFORIA_KEY;
+        parameters.vuforiaLicenseKey = CknSkyBotInfo.VUFORIA_KEY;
 
         //USE FOR WEBCAM
-        //parameters.cameraName = hwMap.get(WebcamName.class, CknTestBotInfo.WEBCAME_NAME);
+        //parameters.cameraName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
 
 
 
@@ -165,20 +188,60 @@ public class CknTestBot extends CknRobot {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         if(useVuforia){
 
-            VuforiaTrackables skystoneTrackables = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
-            VuforiaTrackable bluePerim = skystoneTrackables.get(0);
-            bluePerim.setName("BluePerimeter");
+            skystoneTrackables = this.vuforia.loadTrackablesFromAsset("Skystone");
+            stoneTarget = skystoneTrackables.get(0);
+            stoneTarget.setName("Stone Target");
 
-            VuforiaTrackable redPerim = skystoneTrackables.get(1);
-            redPerim.setName("RedPerimeter");
+            allTrackables.add(stoneTarget);
 
-            VuforiaTrackable frontPerim = skystoneTrackables.get(2);
-            frontPerim.setName("FrontPerimeter");
-
-            VuforiaTrackable backPerim = skystoneTrackables.get(3);
-            backPerim.setName("BackPerimeter");
+            //Set phone info for all trackables
+            for(VuforiaTrackable t : allTrackables){
+                ((VuforiaTrackableDefaultListener) t.getListener())
+                        .setPhoneInformation(CknSkyBotInfo.robotFromCamera, parameters.cameraDirection);
+            }
 
         }
     }
 
+    //Start tracking the targets initialized
+    public void startVuforiaTracking(){
+        if(useVuforia){
+            skystoneTrackables.activate();
+        }
+    }
+
+    //Stop tracking vuforia targets
+    public void stopVuforiaTracking(){
+        if(useVuforia){
+            skystoneTrackables.deactivate();
+        }
+    }
+
+    public OpenGLMatrix trackLocation(){
+        if(!useVuforia) return null;
+
+        boolean targetVisible = false;
+
+        for(VuforiaTrackable t : allTrackables){
+            if (((VuforiaTrackableDefaultListener)t.getListener()).isVisible()) {
+                targetVisible = true;
+                if(!visibleTrackables.contains(t)){
+                    visibleTrackables.add(t);
+                }
+
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)t.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    lastLocation = robotLocationTransform;
+                }
+
+            } else {
+                if(visibleTrackables.contains(t)) visibleTrackables.remove(t);
+            }
+        }
+
+        return lastLocation;
+
+    }
+
 }
+
