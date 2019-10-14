@@ -27,6 +27,12 @@ public class SkyBotTeleop extends LinearOpMode {
             robot.driveBase.mecanumDrive(gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
 
 
+            //dc motor grabber arm
+            //robot.grabberArm.setPower(gamepad2.left_stick_y);
+           // if(robot.grabberArm.getCurrentPosition() = ) {
+           // robot.grabberArm.setPower(0);
+          //  }
+
             //CLAIRE: Figure out the right numbers to set the position. I just guessed with 0 and 180.
             if(gamepad1.a){
                 //robot.stoneGrabber.setPosition(0);

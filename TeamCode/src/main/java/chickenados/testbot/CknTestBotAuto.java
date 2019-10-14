@@ -16,6 +16,7 @@ public class CknTestBotAuto extends LinearOpMode {
     CknTestBot robot;
 
     enum State{
+        TURN,
         DRIVE,
         END;
     }
@@ -46,10 +47,17 @@ public class CknTestBotAuto extends LinearOpMode {
                 currentState = sm.getState();
 
                 switch (currentState){
+                    case TURN:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(0, 45, 1.5, event);
+
+                        sm.waitForEvent(event, State.DRIVE);
+                        break;
                     case DRIVE:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(24, 0, 1.5, event);
+                        robot.pidDrive.driveDistanceTank(20,45,1, event);
 
                         sm.waitForEvent(event, State.END);
                         break;
