@@ -20,6 +20,7 @@ import chickenlib.CknDriveBase;
 import chickenlib.CknPIDController;
 import chickenlib.CknPIDDrive;
 import chickenlib.display.CknSmartDashboard;
+import chickenlib.inputstreams.CknEncoderInputStream;
 import chickenlib.inputstreams.CknLocationInputStream;
 import chickenlib.location.CknLocationTracker;
 import chickenlib.opmode.CknRobot;
@@ -39,6 +40,7 @@ public class CknSkyBot extends CknRobot {
     List<VuforiaTrackable> allTrackables = new ArrayList<>();
     List<VuforiaTrackable> visibleTrackables = new ArrayList<>();
 
+    //Drivetrain subsystem
     public CknDriveBase driveBase;
     public CknPIDDrive pidDrive;
     public CknLocationTracker locationTracker;
@@ -52,7 +54,11 @@ public class CknSkyBot extends CknRobot {
     DcMotor frontRight;
     DcMotor rearLeft;
     DcMotor rearRight;
-    DcMotor grabberArm;
+
+    //Grabber subsystem
+    DcMotor grabberArmMotor;
+    SkybotGrabberArm grabberArm;
+    CknPIDController grabberPid;
 
     Servo stoneGrabber;
 
@@ -158,8 +164,19 @@ public class CknSkyBot extends CknRobot {
 
 
         //
-        // Servo Grabber Arm Subsystem
+        // Grabber Arm Subsystem
         //
+        CknPIDController.Parameters grabberParams = new CknPIDController.Parameters();
+        grabberParams.allowOscillation = false;
+        grabberParams.useWraparound = false;
+
+        grabberPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknSkyBotInfo.GRABBER_PID_P, CknSkyBotInfo.GRABBER_PID_I, CknSkyBotInfo.GRABBER_PID_D),
+                new CknEncoderInputStream(grabberArmMotor), grabberParams);
+
+        grabberArmMotor = hwMap.dcMotor.get(CknSkyBotInfo.GRABBER_ARM_MOTOR_NAME);
+        grabberArm = new SkybotGrabberArm(grabberArmMotor, grabberPid);
+
+
         //stoneGrabber = hwMap.servo.get(CknSkyBotInfo.STONE_GRABBER_NAME);
 
         if(useVuforia){
@@ -173,7 +190,7 @@ public class CknSkyBot extends CknRobot {
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
 
         // Init Vuforia
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(/*cameraMonitorViewId*/);
 
         //Use only if using phone camera
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
