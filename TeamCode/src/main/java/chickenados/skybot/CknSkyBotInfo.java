@@ -23,9 +23,9 @@ public class CknSkyBotInfo {
     // Grabber Subsystem
     //
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
-<<<<<<< HEAD
-        //port zero hub two -Anna
-=======
+
+    //port zero hub two -Anna
+
     public static final String GRABBER_ARM_MOTOR_NAME = "grabberArm";
 
     public static final double GRABBER_PID_P = 0.007;
@@ -34,7 +34,7 @@ public class CknSkyBotInfo {
 
     public static final int GRABBER_EXTENDED_ENCODER_COUNT = 1000;
     public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
->>>>>>> 9d809f4f10f950dcfe9da3e2448a04875dd8a632
+
 
     // Tele Op Variables
     public static final double FULL_SPEED = 1.0;
