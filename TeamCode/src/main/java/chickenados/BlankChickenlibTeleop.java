@@ -17,7 +17,7 @@ public class BlankChickenlibTeleop extends LinearOpMode {
     CknTestBot robot;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
 
         robot = new CknTestBot(hardwareMap, telemetry, false);
 
@@ -27,16 +27,14 @@ public class BlankChickenlibTeleop extends LinearOpMode {
 
         robot.dashboard.setLine(1, "Robot Running");
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             CknUtil.CknLoopCounter.getInstance().loop++;
             mgr.executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
 
             // Put teleop code below this line
 
 
-            robot.driveBase.tankDrive(gamepad1.left_stick_y, gamepad1.right_stick_y);
-
-
+            robot.driveBase.mecanumDrive(gamepad1.left_stick_y, gamepad1.right_stick_y, gamepad1.left_stick_x);
 
 
             // Put Teleop code above this line
@@ -44,5 +42,4 @@ public class BlankChickenlibTeleop extends LinearOpMode {
         }
 
     }
-
 }

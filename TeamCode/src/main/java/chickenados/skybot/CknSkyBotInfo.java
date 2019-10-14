@@ -23,6 +23,7 @@ public class CknSkyBotInfo {
     // Servo name
     //
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
+        //port zero hub two -Anna
 
     // Tele Op Variables
     public static final double FULL_SPEED = 1.0;

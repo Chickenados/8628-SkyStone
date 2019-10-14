@@ -16,8 +16,8 @@ public class CknTestBotAuto extends LinearOpMode {
     CknTestBot robot;
 
     enum State{
-        TURN,
-        DRIVE,
+        MOVEAWAY,
+        UNDERBRIDGE,
         END;
     }
 
@@ -33,6 +33,8 @@ public class CknTestBotAuto extends LinearOpMode {
 
         waitForStart();
 
+        sm.start(State.MOVEAWAY);
+
         while(opModeIsActive()){
             CknUtil.CknLoopCounter.getInstance().loop++;
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
@@ -40,24 +42,24 @@ public class CknTestBotAuto extends LinearOpMode {
             robot.dashboard.setLine(1, "State: " + currentState);
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
-            sm.start(State.DRIVE);
+
 
             if(sm.isReady()){
 
                 currentState = sm.getState();
 
                 switch (currentState){
-                    case TURN:
+                    case MOVEAWAY:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(0, 45, 1.5, event);
+                        robot.pidDrive.driveDistanceTank(10, 0, 1, event);
 
-                        sm.waitForEvent(event, State.DRIVE);
+                        sm.waitForEvent(event, State.UNDERBRIDGE);
                         break;
-                    case DRIVE:
+                    case UNDERBRIDGE:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(20,45,1, event);
+                        robot.pidDrive.driveDistanceTank(20,250,1, event);
 
                         sm.waitForEvent(event, State.END);
                         break;
