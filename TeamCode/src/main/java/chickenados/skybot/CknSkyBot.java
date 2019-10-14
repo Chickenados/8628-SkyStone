@@ -52,6 +52,7 @@ public class CknSkyBot extends CknRobot {
     DcMotor frontRight;
     DcMotor rearLeft;
     DcMotor rearRight;
+    DcMotor grabberArm;
 
     Servo stoneGrabber;
 
