@@ -172,7 +172,7 @@ public class CknSkyBot extends CknRobot {
         int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
 
         // Init Vuforia
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(/*cameraMonitorViewId*/);
 
         //Use only if using phone camera
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
