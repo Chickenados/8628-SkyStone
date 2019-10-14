@@ -20,9 +20,17 @@ public class CknSkyBotInfo {
     public static final String FRONT_RIGHT_NAME = "frontRight";
 
     //
-    // Servo name
+    // Grabber Subsystem
     //
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
+    public static final String GRABBER_ARM_MOTOR_NAME = "grabberArm";
+
+    public static final double GRABBER_PID_P = 0.007;
+    public static final double GRABBER_PID_I = 0.0;
+    public static final double GRABBER_PID_D = 0.0;
+
+    public static final int GRABBER_EXTENDED_ENCODER_COUNT = 1000;
+    public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
 
     // Tele Op Variables
     public static final double FULL_SPEED = 1.0;
