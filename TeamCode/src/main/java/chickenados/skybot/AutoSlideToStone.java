@@ -20,6 +20,8 @@ public class AutoSlideToStone extends LinearOpMode {
     enum State{
         SEARCH,
         MOVE_TO_STONE,
+        MOVE_TO_BRIDGE,
+        MOVE_TO_PARK,
         END;
     }
 
@@ -66,6 +68,21 @@ public class AutoSlideToStone extends LinearOpMode {
                         sm.waitForEvent(event, State.MOVE_TO_STONE);
                         break;
                     case MOVE_TO_STONE:
+                        event.reset();
+
+                       // robot.pidDrive.driveDistanceTank(4, 90, 1, event);
+                       // robot.pidDrive.driveDistanceTank(0, 0, 1, event);
+                        //based on vuforia target location the distance changes
+                       // robot.pidDrive.driveDistanceTank(19, -90, 2, event);
+
+                        sm.waitForEvent(event, State.MOVE_TO_BRIDGE);
+                        break;
+                    case MOVE_TO_BRIDGE:
+                        event.reset();
+
+                        sm.waitForEvent(event, State.MOVE_TO_PARK);
+                        break;
+                    case MOVE_TO_PARK:
                         event.reset();
 
                         sm.waitForEvent(event, State.END);
