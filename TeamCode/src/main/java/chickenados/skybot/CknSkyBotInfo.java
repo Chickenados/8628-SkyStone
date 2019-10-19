@@ -33,8 +33,11 @@ public class CknSkyBotInfo {
     public static final double GRABBER_PID_I = 0.0;
     public static final double GRABBER_PID_D = 0.0;
 
-    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -2220;
-    public static final int GRABBER_RETRACTED_ENCODER_COUNT = -1750;
+    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -1000;
+    public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
+    public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = 750;
+    public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = 250;
+
 
 
     // Tele Op Variables
