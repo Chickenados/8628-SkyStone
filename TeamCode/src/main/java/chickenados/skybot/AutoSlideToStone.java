@@ -70,21 +70,23 @@ public class AutoSlideToStone extends LinearOpMode {
                     case MOVE_TO_STONE:
                         event.reset();
 
-                       // robot.pidDrive.driveDistanceTank(4, 90, 1, event);
-                       // robot.pidDrive.driveDistanceTank(0, 0, 1, event);
+                        //robot.pidDrive.driveDistanceTank(4, 90, 1, event);
+                        //robot.pidDrive.driveDistanceTank(0, 0, 1, event);
                         //based on vuforia target location the distance changes
-                       // robot.pidDrive.driveDistanceTank(19, -90, 2, event);
-
+                        robot.pidDrive.driveDistanceTank(19, 0, 2, event);
+                        robot.grabberArm.extend(null,2.0);
+                        robot.stoneGrabber.setPosition(180);
+                        robot.grabberArm.lowPosition(null,2.0);
                         sm.waitForEvent(event, State.MOVE_TO_BRIDGE);
                         break;
                     case MOVE_TO_BRIDGE:
                         event.reset();
-
+                        robot.pidDrive.driveDistanceTank(0, 0, 1, event);
                         sm.waitForEvent(event, State.MOVE_TO_PARK);
                         break;
                     case MOVE_TO_PARK:
                         event.reset();
-
+                        robot.pidDrive.driveDistanceTank(0, 0, 1, event);
                         sm.waitForEvent(event, State.END);
                         break;
                     case END:

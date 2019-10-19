@@ -37,18 +37,22 @@ public class SkyBotTeleop extends LinearOpMode {
             }
 
 
-            if(gamepad1.x){
-                robot.grabberArm.retract(null, 2.0);
-            } else if (gamepad1.y){
+            if(gamepad2.x){
+                robot.grabberArm.retract(null,2.0);
+            } else if (gamepad2.y){
                 robot.grabberArm.extend(null, 2.0);
-            }
+            } else if (gamepad2.a){
+                robot.grabberArm.highPosition(null, 2.0);
+            } else if (gamepad2.b){
+            robot.grabberArm.lowPosition(null, 2.0);
+        }
 
             //CLAIRE: Figure out the right numbers to set the position. I just guessed with 0 and 180.
-            if(gamepad1.a){
-                //robot.stoneGrabber.setPosition(0);
-            } else {
-                //robot.stoneGrabber.setPosition(180);
-            }
+           // if(gamepad1.a){
+             //   robot.stoneGrabber.setPosition(180);
+            //} else {
+           //     robot.stoneGrabber.setPosition(0);
+          //  }
 
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
         }
