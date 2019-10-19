@@ -70,7 +70,7 @@ public class SkybotGrabberArm implements CknTaskManager.Task {
 
         double motorPower = grabberPID.getOutput();
 
-        armMotor.setPower(Range.clip(motorPower, -1.0, 1.0));
+        armMotor.setPower(Range.clip(motorPower, -CknSkyBotInfo.GRABBER_ARM_MOTOR_SPEED, CknSkyBotInfo.GRABBER_ARM_MOTOR_SPEED));
         if(grabberPID.onTarget() || CknUtil.getCurrentTime() > startTime + timeout){
             stop();
         }

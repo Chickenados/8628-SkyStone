@@ -170,14 +170,17 @@ public class CknSkyBot extends CknRobot {
         grabberParams.allowOscillation = false;
         grabberParams.useWraparound = false;
 
+        grabberArmMotor = hwMap.dcMotor.get(CknSkyBotInfo.GRABBER_ARM_MOTOR_NAME);
+        grabberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        grabberArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        grabberArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         grabberPid = new CknPIDController(new CknPIDController.PIDCoefficients(CknSkyBotInfo.GRABBER_PID_P, CknSkyBotInfo.GRABBER_PID_I, CknSkyBotInfo.GRABBER_PID_D),
                 new CknEncoderInputStream(grabberArmMotor), grabberParams);
-
-        grabberArmMotor = hwMap.dcMotor.get(CknSkyBotInfo.GRABBER_ARM_MOTOR_NAME);
         grabberArm = new SkybotGrabberArm(grabberArmMotor, grabberPid);
 
 
-        //stoneGrabber = hwMap.servo.get(CknSkyBotInfo.STONE_GRABBER_NAME);
+        stoneGrabber = hwMap.servo.get(CknSkyBotInfo.STONE_GRABBER_NAME);
 
         if(useVuforia){
             initVuforia();
