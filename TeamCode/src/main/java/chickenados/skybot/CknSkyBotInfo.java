@@ -2,14 +2,16 @@ package chickenados.skybot;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 public class CknSkyBotInfo {
 
-    private static final float mmPerInch        = 25.4f;
+    public static final float mmPerInch        = 25.4f;
 
     //
     // Drive Train Motor Names
@@ -65,22 +67,17 @@ public class CknSkyBotInfo {
 
 
     // Webcam
-    //TODO: Make sure these are correct
     public static final String WEBCAME_NAME = "Webcam";
     public static final String VUFORIA_KEY = "AV2hPmr/////AAABmQLD9hUunkK4tSZiwFAlrpZPoN76Ej8hCf1AdzRK5+dWdO6VF0iKY/cqgZLxkQ4RCD0KXMvXtiUx87IkUWaghhJYq446Zx2MDU12MXtsE9hq8p3alcdmCCvCun+veOD/mwKlEXDnZYl8jMzxcCOpEqr3Uc2MzsjpFbrdr+m5tYXmNAKQrN9Bq4VALSSl/pUhk1/swPiJenMa938xu0pN4C+xuOCyAmNX44yln0q8GnoGmtmdMCg3NTOiEDm6K/fFTLI1nWN2LOWzVQZ88Ul0EIjgdTfA+DYgz5O8AS/leZcUn7WTbPbhy/5NaqorhI+6u1YMYYFaPq41j3lenoUU+6DdfK133dZ8+M57EvFVXJSv";
+    // Vuforia
+    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    public static final boolean CAMERA_IS_PORTRAIT = false  ;
+    public static final double ROBOT_LENGTH                    = 17.5; //Robot length in inches
+    public static final double ROBOT_WIDTH                     = 17.5; //Robot width in inches
+    public static final float CAMERA_FRONT_OFFSET  = 8.625f;   //Camera offset from front of robot in inches
+    public static final float CAMERA_HEIGHT_OFFSET = 12.0f;   //Camera offset from front of robot in inches
+    public static final float CAMERA_LEFT_OFFSET     = -5.25f; //Camera offset from the left side of the robot in inches
 
-    // Vuforia numbers
-    private static final float CAMERA_FORWARD_DISPLACEMENT  = 8.625f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
-    private static final float CAMERA_VERTICAL_DISPLACEMENT = 12.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
-    private static final float CAMERA_LEFT_DISPLACEMENT     = -5.25f * mmPerInch;     // eg: Camera is ON the robot's center line
-
-    private static float phoneXRotate    = 90;
-    private static float phoneYRotate    = -90;
-    private static float phoneZRotate    = 0;
-
-
-    public static OpenGLMatrix robotFromCamera = OpenGLMatrix
-            .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
-            .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
+    public static final String TRACKABLES_FILE_NAME = "Skystone";
 
 }

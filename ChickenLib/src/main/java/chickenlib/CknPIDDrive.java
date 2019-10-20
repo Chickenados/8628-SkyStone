@@ -8,6 +8,7 @@ public class CknPIDDrive implements CknTaskManager.Task{
 
     CknDriveBase driveBase;
     CknPIDController yPid;
+    CknPIDController xPid;
     CknPIDController turnPid;
     CknEvent event;
 
@@ -80,6 +81,21 @@ public class CknPIDDrive implements CknTaskManager.Task{
 
     public void setTarget(double target){
         yPid.setSetPoint(target, true);
+    }
+
+    public void setTarget(double xTarget, double yTarget, double turnTarget){
+
+        if(xPid != null){
+            xPid.setSetPoint(xTarget, true);
+        }
+
+        if(yPid != null){
+            yPid.setSetPoint(yTarget, true);
+        }
+
+        if(turnPid != null){
+            turnPid.setSetPoint(turnTarget, true);
+        }
     }
 
     public void stop(){
