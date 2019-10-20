@@ -7,14 +7,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import chickenlib.CknDriveBase;
 import chickenlib.CknPIDController;
@@ -23,22 +20,25 @@ import chickenlib.display.CknSmartDashboard;
 import chickenlib.inputstreams.CknEncoderInputStream;
 import chickenlib.inputstreams.CknLocationInputStream;
 import chickenlib.location.CknLocationTracker;
+import chickenlib.location.CknPose;
 import chickenlib.opmode.CknRobot;
 import chickenlib.sensor.CknAccelerometer;
 import chickenlib.sensor.CknBNO055IMU;
+import chickenlib.vision.CknVuforia;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 public class CknSkyBot extends CknRobot {
     HardwareMap hwMap;
-    private boolean useVuforia;
-    private VuforiaLocalizer vuforia;
+    boolean useVuforia;
 
     //Vuforia Targets
-    VuforiaTrackables skystoneTrackables;
-    VuforiaTrackable stoneTarget;
-    OpenGLMatrix lastLocation = null;
-
-    List<VuforiaTrackable> allTrackables = new ArrayList<>();
-    List<VuforiaTrackable> visibleTrackables = new ArrayList<>();
+    CknVuforia vuforia;
+    CameraName webcameName;
+    VuforiaVision vuforiaVision;
 
     //Drivetrain subsystem
     public CknDriveBase driveBase;
@@ -190,78 +190,51 @@ public class CknSkyBot extends CknRobot {
 
     private void initVuforia(){
 
-        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        float phoneXRotate;
+        float phoneYRotate;
+        float phoneZRotate = 0.0f;
 
-        // Init Vuforia
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(/*cameraMonitorViewId*/);
+        webcameName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
+        // Set this int to -1 if you want to disable the camera monitor.
+        int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
+                "id", hwMap.appContext.getPackageName());
 
-        //Use only if using phone camera
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName);
 
-        parameters.vuforiaLicenseKey = CknSkyBotInfo.VUFORIA_KEY;
+        // We need to rotate the camera around it's long axis to bring the correct camera forward.
+        phoneYRotate = CknSkyBotInfo.CAMERA_CHOICE == BACK ? -90.0f : 90.0f;
 
-        //USE FOR WEBCAM
-        //parameters.cameraName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
+        // Rotate the phone vertical about the X axis if it's in portrait mode
+        phoneXRotate = CknSkyBotInfo.CAMERA_IS_PORTRAIT ? 90.0f : 0.0f;
 
+        final int CAMERA_FORWARD_DISPLACEMENT = (int)((CknSkyBotInfo.ROBOT_LENGTH/2.0 - CknSkyBotInfo.CAMERA_FRONT_OFFSET)* CknSkyBotInfo.mmPerInch);
+        final int CAMERA_VERTICAL_DISPLACEMENT = (int)(CknSkyBotInfo.CAMERA_HEIGHT_OFFSET*CknSkyBotInfo.mmPerInch);
+        final int CAMERA_LEFT_DISPLACEMENT = (int)((CknSkyBotInfo.ROBOT_WIDTH/2.0 - CknSkyBotInfo.CAMERA_LEFT_OFFSET)*CknSkyBotInfo.mmPerInch);
 
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
+                        phoneYRotate, phoneZRotate, phoneXRotate));
 
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        if(useVuforia){
-
-            skystoneTrackables = this.vuforia.loadTrackablesFromAsset("Skystone");
-            stoneTarget = skystoneTrackables.get(0);
-            stoneTarget.setName("Stone Target");
-
-            allTrackables.add(stoneTarget);
-
-            //Set phone info for all trackables
-            for(VuforiaTrackable t : allTrackables){
-                ((VuforiaTrackableDefaultListener) t.getListener())
-                        .setPhoneInformation(CknSkyBotInfo.robotFromCamera, parameters.cameraDirection);
-            }
-
-        }
+        vuforiaVision = new VuforiaVision(vuforia, robotFromCamera);
     }
 
-    //Start tracking the targets initialized
-    public void startVuforiaTracking(){
-        if(useVuforia){
-            skystoneTrackables.activate();
-        }
-    }
+    public CknPose getSkystonePose(){
+        CknPose pose = null;
 
-    //Stop tracking vuforia targets
-    public void stopVuforiaTracking(){
-        if(useVuforia){
-            skystoneTrackables.deactivate();
-        }
-    }
-
-    public OpenGLMatrix trackLocation(){
-        if(!useVuforia) return null;
-
-        boolean targetVisible = false;
-
-        for(VuforiaTrackable t : allTrackables){
-            if (((VuforiaTrackableDefaultListener)t.getListener()).isVisible()) {
-                targetVisible = true;
-                if(!visibleTrackables.contains(t)){
-                    visibleTrackables.add(t);
-                }
-
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)t.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocation = robotLocationTransform;
-                }
-
-            } else {
-                if(visibleTrackables.contains(t)) visibleTrackables.remove(t);
+        if(vuforiaVision != null){
+            OpenGLMatrix robotLocation = vuforiaVision.getRobotLocation();
+            if (robotLocation != null)
+            {
+                VectorF translation = vuforiaVision.getLocationTranslation(robotLocation);
+                Orientation orientation = vuforiaVision.getLocationOrientation(robotLocation);
+                pose = new CknPose(
+                        translation.get(1)/CknSkyBotInfo.mmPerInch, -translation.get(0)/CknSkyBotInfo.mmPerInch,
+                        orientation.thirdAngle);
             }
         }
 
-        return lastLocation;
-
+        return pose;
     }
 
 }

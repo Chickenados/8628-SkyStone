@@ -41,7 +41,6 @@ public class AutoSlideToStone extends LinearOpMode {
 
         waitForStart();
 
-        robot.startVuforiaTracking();
 
         while(opModeIsActive()){
             CknUtil.CknLoopCounter.getInstance().loop++;
@@ -51,7 +50,7 @@ public class AutoSlideToStone extends LinearOpMode {
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
             if(currentState == State.SEARCH){
-                vuforiaLocation = robot.trackLocation();
+                //vuforiaLocation = robot.trackLocation();
                 if(vuforiaLocation != null && vuforiaLocation.getTranslation().get(0) != 0){
                     event.set(true);
                 }
@@ -103,6 +102,6 @@ public class AutoSlideToStone extends LinearOpMode {
 
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
         }
-        robot.stopVuforiaTracking();
+
     }
 }
