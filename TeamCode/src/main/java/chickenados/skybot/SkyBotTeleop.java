@@ -13,7 +13,6 @@ public class SkyBotTeleop extends LinearOpMode {
     CknTaskManager mgr = new CknTaskManager();
     CknSkyBot robot;
 
-    boolean rightBumperHeld = false;
     @Override
     public void runOpMode(){
 
@@ -28,13 +27,11 @@ public class SkyBotTeleop extends LinearOpMode {
 
             robot.driveBase.mecanumDrive(gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
 
-           // if(gamepad2.right_bumper && !rightBumperHeld){
-             //   rightBumperHeld=true;
-               // robot.driveBase.setSpeed(CknSkyBotInfo.PRECISION_SPEED);
-           // } else if(rightBumperHeld && !gamepad1.right_bumper){
-             //   rightBumperHeld = false;
-               // robot.driveBase.setSpeed(CknSkyBotInfo.FULL_SPEED);
-            //}
+            if(gamepad1.x){
+                robot.driveBase.setSpeed(CknSkyBotInfo.PRECISION_SPEED);
+            } else if(!gamepad1.x){
+               robot.driveBase.setSpeed(CknSkyBotInfo.FULL_SPEED);
+            }
 
 
             if(gamepad1.right_bumper){
