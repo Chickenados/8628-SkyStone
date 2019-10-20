@@ -36,13 +36,13 @@ public class CknSkyBotInfo {
     public static final double GRABBER_PID_D = 0.0;
 
     public static final int GRABBER_EXTENDED_ENCODER_COUNT = -2225;
-    //gamepad2 y, parallel to ground position
+    //gamepad1 left bumper, parallel to ground position
     public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
-    //gamepad2 x, all the way back
+    //gamepad1 right bumper, all the way back
     public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = -1000;
-    //gamepad2 a dropping position
+    //gamepad1 right trigger dropping position
     public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = -1600;
-    //gamepad2 b under alliance bridge
+    //gamepad1 left trigger under alliance bridge
 
 
 
