@@ -162,7 +162,7 @@ public class CknDriveBase {
     }
 
     /**
-     * Use Mecanum drive to move the robot to a specified x-y point while maintaining an angle
+     * Use Mecanum drive to move the robot with a specified x and y speed while maintaining an angle
      *
      * @param x The distance we want to move on the x-axis
      * @param y The distance we want to move on the y-axis

@@ -59,6 +59,10 @@ public class CknSkyBotInfo {
     public static final double Y_ENCODER_PID_I = 0.0;
     public static final double Y_ENCODER_PID_D = 0.0;
 
+    public static final double X_ENCODER_PID_P = 0.00095;
+    public static final double X_ENCODER_PID_I = 0.0;
+    public static final double X_ENCODER_PID_D = 0.0;
+
     public static final double TURN_PID_P = 0.025;
     public static final double TURN_PID_I = 0.0;
     public static final double TURN_PID_D = 0.0;
@@ -67,16 +71,16 @@ public class CknSkyBotInfo {
 
 
     // Webcam
-    public static final String WEBCAME_NAME = "Webcam";
+    public static final String WEBCAME_NAME = "Webcam 1";
     public static final String VUFORIA_KEY = "AV2hPmr/////AAABmQLD9hUunkK4tSZiwFAlrpZPoN76Ej8hCf1AdzRK5+dWdO6VF0iKY/cqgZLxkQ4RCD0KXMvXtiUx87IkUWaghhJYq446Zx2MDU12MXtsE9hq8p3alcdmCCvCun+veOD/mwKlEXDnZYl8jMzxcCOpEqr3Uc2MzsjpFbrdr+m5tYXmNAKQrN9Bq4VALSSl/pUhk1/swPiJenMa938xu0pN4C+xuOCyAmNX44yln0q8GnoGmtmdMCg3NTOiEDm6K/fFTLI1nWN2LOWzVQZ88Ul0EIjgdTfA+DYgz5O8AS/leZcUn7WTbPbhy/5NaqorhI+6u1YMYYFaPq41j3lenoUU+6DdfK133dZ8+M57EvFVXJSv";
     // Vuforia
     public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     public static final boolean CAMERA_IS_PORTRAIT = false  ;
     public static final double ROBOT_LENGTH                    = 17.5; //Robot length in inches
     public static final double ROBOT_WIDTH                     = 17.5; //Robot width in inches
-    public static final float CAMERA_FRONT_OFFSET  = 8.625f;   //Camera offset from front of robot in inches
-    public static final float CAMERA_HEIGHT_OFFSET = 12.0f;   //Camera offset from front of robot in inches
-    public static final float CAMERA_LEFT_OFFSET     = -5.25f; //Camera offset from the left side of the robot in inches
+    public static final float CAMERA_FRONT_OFFSET  = 0f;   //Camera offset from front of robot in inches
+    public static final float CAMERA_HEIGHT_OFFSET = 5.5f;   //Camera offset from floor of robot in inches
+    public static final float CAMERA_LEFT_OFFSET     = 13.5f; //Camera offset from the left side of the robot in inches
 
     public static final String TRACKABLES_FILE_NAME = "Skystone";
 

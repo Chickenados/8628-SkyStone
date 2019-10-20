@@ -108,6 +108,9 @@ public class CknPIDDrive implements CknTaskManager.Task{
         if(yPid != null){
             yPid.reset();
         }
+        if(xPid != null){
+            xPid.reset();
+        }
 
         driveBase.stopMotors();
     }

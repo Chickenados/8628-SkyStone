@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import chickenados.testbot.CknTestBotAuto;
 import chickenlib.CknStateMachine;
 import chickenlib.CknTaskManager;
+import chickenlib.location.CknPose;
 import chickenlib.util.CknEvent;
 import chickenlib.util.CknUtil;
 
@@ -31,6 +32,7 @@ public class AutoSlideToStone extends LinearOpMode {
     private State currentState;
 
     OpenGLMatrix vuforiaLocation = null;
+    CknPose skystonePose;
 
     @Override
     public void runOpMode(){
@@ -41,6 +43,7 @@ public class AutoSlideToStone extends LinearOpMode {
 
         waitForStart();
 
+        robot.vuforiaVision.setEnabled(true);
 
         while(opModeIsActive()){
             CknUtil.CknLoopCounter.getInstance().loop++;
@@ -50,9 +53,12 @@ public class AutoSlideToStone extends LinearOpMode {
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
             if(currentState == State.SEARCH){
-                //vuforiaLocation = robot.trackLocation();
-                if(vuforiaLocation != null && vuforiaLocation.getTranslation().get(0) != 0){
-                    event.set(true);
+                skystonePose = robot.getSkystonePose();
+                if(skystonePose != null) {
+                    robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
+                }
+                if(skystonePose != null && skystonePose.x != 0){
+                    //event.set(true);
                 }
             }
 
@@ -64,7 +70,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case SEARCH:
                         event.reset();
 
-                        sm.waitForEvent(event, State.MOVE_TO_STONE);
+                        sm.waitForEvent(event, State.END);
                         break;
                     case MOVE_TO_STONE:
                         event.reset();
@@ -89,9 +95,7 @@ public class AutoSlideToStone extends LinearOpMode {
                         sm.waitForEvent(event, State.END);
                         break;
                     case END:
-                        robot.dashboard.setLine(3, "Location: X: " + vuforiaLocation.getTranslation().get(0) / 25.4f +
-                                " Y: " + vuforiaLocation.getTranslation().get(1) / 25.4f + " Z: " +
-                                vuforiaLocation.getTranslation().get(2) / 25.4f);
+                        robot.vuforiaVision.setEnabled(false);
                         event.reset();
                         sm.stop();
                         break;

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import chickenlib.CknDriveBase;
 import chickenlib.CknPIDController;
@@ -199,7 +200,7 @@ public class CknSkyBot extends CknRobot {
         int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
                 "id", hwMap.appContext.getPackageName());
 
-        vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName);
+        vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName, BACK);
 
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
         phoneYRotate = CknSkyBotInfo.CAMERA_CHOICE == BACK ? -90.0f : 90.0f;
