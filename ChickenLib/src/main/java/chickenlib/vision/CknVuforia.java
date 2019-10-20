@@ -69,8 +69,9 @@ public class CknVuforia {
     * Constructor for using Vuforia with webcam
      */
 
-    public CknVuforia(String licenseKey, int cameraMonitorViewID, CameraName webcameName){
+    public CknVuforia(String licenseKey, int cameraMonitorViewID, CameraName webcameName, VuforiaLocalizer.CameraDirection cameraDirection){
         usingWebcam = true;
+        this.cameraDirection = cameraDirection;
 
         VuforiaLocalizer.Parameters params =
                 cameraMonitorViewID == -1? new VuforiaLocalizer.Parameters(): new VuforiaLocalizer.Parameters(cameraMonitorViewID);

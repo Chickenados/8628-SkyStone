@@ -128,6 +128,10 @@ public class VuforiaVision {
         vuforia.setTrackingEnabled(enabled);
     }
 
+    public void setEnabled(boolean enabled){
+        setEnabled(enabled, false);
+    }
+
     public OpenGLMatrix getRobotLocation()
     {
         OpenGLMatrix robotLocation = null;
