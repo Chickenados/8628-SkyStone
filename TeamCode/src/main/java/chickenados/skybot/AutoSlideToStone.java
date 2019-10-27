@@ -19,6 +19,7 @@ public class AutoSlideToStone extends LinearOpMode {
     CknSkyBot robot;
 
     enum State{
+        MOVE_FORWARD,
         SEARCH,
         MOVE_TO_STONE,
         MOVE_TO_BRIDGE,
@@ -39,7 +40,7 @@ public class AutoSlideToStone extends LinearOpMode {
 
         robot = new CknSkyBot(hardwareMap, telemetry, true);
 
-        sm.start(State.SEARCH);
+        sm.start(State.MOVE_FORWARD);
 
         waitForStart();
 
@@ -58,7 +59,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
                 }
                 if(skystonePose != null && skystonePose.x != 0){
-                    //event.set(true);
+                    event.set(true);
                 }
             }
 
@@ -67,31 +68,31 @@ public class AutoSlideToStone extends LinearOpMode {
                 currentState = sm.getState();
 
                 switch (currentState) {
+                    case MOVE_FORWARD:
+                        event.reset();
+                        robot.stoneGrabber.setPosition(0);
+                        robot.pidDrive.driveDistanceTank(-14,0,2.0, event);
+                        sm.waitForEvent(event, State.SEARCH);
                     case SEARCH:
                         event.reset();
 
-                        sm.waitForEvent(event, State.END);
+                        sm.waitForEvent(event, State.MOVE_TO_STONE);
                         break;
                     case MOVE_TO_STONE:
                         event.reset();
-
-                        //robot.pidDrive.driveDistanceTank(4, 90, 1, event);
-                        //robot.pidDrive.driveDistanceTank(0, 0, 1, event);
-                        //based on vuforia target location the distance changes
-                        robot.pidDrive.driveDistanceTank(19, 0, 2, event);
-                        robot.grabberArm.extend(null,2.0);
-                        robot.stoneGrabber.setPosition(93);
-                        robot.grabberArm.lowPosition(null,2.0);
+                        robot.pidDrive.driveDistanceTank(-skystonePose.x-4.5, 90,2, event);
                         sm.waitForEvent(event, State.MOVE_TO_BRIDGE);
                         break;
                     case MOVE_TO_BRIDGE:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(0, 0, 1, event);
+                        robot.pidDrive.driveDistanceTank(-4, -90, 2, event);
+                        robot.grabberArm.extend(null,2.0);
+                        robot.stoneGrabber.setPosition(93);
                         sm.waitForEvent(event, State.MOVE_TO_PARK);
                         break;
                     case MOVE_TO_PARK:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(0, 0, 1, event);
+                        robot.grabberArm.lowPosition(null,2.0);
                         sm.waitForEvent(event, State.END);
                         break;
                     case END:

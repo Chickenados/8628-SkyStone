@@ -29,8 +29,6 @@ public class SkyBotTeleop extends LinearOpMode {
 
             if(gamepad1.x){
                 robot.driveBase.setSpeed(CknSkyBotInfo.PRECISION_SPEED);
-            } else if(!gamepad1.x){
-               robot.driveBase.setSpeed(CknSkyBotInfo.FULL_SPEED);
             }
 
 
