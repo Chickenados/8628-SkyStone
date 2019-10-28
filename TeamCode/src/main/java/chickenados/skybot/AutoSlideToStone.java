@@ -10,6 +10,7 @@ import chickenlib.CknStateMachine;
 import chickenlib.CknTaskManager;
 import chickenlib.location.CknPose;
 import chickenlib.util.CknEvent;
+import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
 @Autonomous(name = "Test Slide To Stone")
@@ -21,8 +22,10 @@ public class AutoSlideToStone extends LinearOpMode {
     enum State{
         MOVE_FORWARD,
         SEARCH,
-        MOVE_TO_STONE,
+        TURN_TO_STONE,
         MOVE_AGAIN_TO_STONE,
+        EXTEND_ARM,
+        GRAB_STONE,
         MOVE_TO_LOW_POSITION,
         MOVE_TO_BRIDGE,
         MOVE_TO_FOUNDATION,
@@ -33,11 +36,14 @@ public class AutoSlideToStone extends LinearOpMode {
 
     CknStateMachine<State> sm = new CknStateMachine<>();
     private CknEvent event = new CknEvent();
+    private CknStopwatch stopwatch = new CknStopwatch(event);
 
     private State currentState;
 
     OpenGLMatrix vuforiaLocation = null;
     CknPose skystonePose;
+    double searchStartTime;
+    double turnAmount;
 
     @Override
     public void runOpMode(){
@@ -58,14 +64,20 @@ public class AutoSlideToStone extends LinearOpMode {
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
             if(currentState == State.SEARCH){
+
                 skystonePose = robot.getSkystonePose();
                 if(skystonePose != null) {
                     robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
                     if(skystonePose.x != 0){
                         event.set(true);
                         robot.vuforiaVision.setEnabled(false);
-                        sm.setState(State.MOVE_TO_STONE);
+                        sm.setState(State.TURN_TO_STONE);
                     }
+                }
+                if(CknUtil.getCurrentTime() > 1.5 + searchStartTime){
+                    event.set(true);
+                    robot.vuforiaVision.setEnabled(false);
+                    sm.setState(State.TURN_TO_STONE);
                 }
             }
 
@@ -82,23 +94,51 @@ public class AutoSlideToStone extends LinearOpMode {
                     case SEARCH:
                         event.reset();
 
-                        sm.setState(State.MOVE_TO_STONE);
+                        searchStartTime = CknUtil.getCurrentTime();
+
+                        sm.setState(State.TURN_TO_STONE);
                         break;
-                    case MOVE_TO_STONE:
+                    case TURN_TO_STONE:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(skystonePose.x+4.5, 90,2, event);
+
+                        if(skystonePose != null){
+                            turnAmount = Math.toDegrees(Math.atan(skystonePose.y/skystonePose.x));
+                        } else {
+                            turnAmount = 0;
+                        }
+
+                        robot.pidDrive.driveDistanceTank(0, turnAmount,2, event);
+
+
+
                         sm.waitForEvent(event, State.MOVE_AGAIN_TO_STONE);
                         break;
                     case MOVE_AGAIN_TO_STONE:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(8, -90, 2, event);
-                        robot.grabberArm.extend(null,2.0);
-                        robot.stoneGrabber.setPosition(93);
+                        robot.pidDrive.driveDistanceTank(6, turnAmount, 2, event);
+                        sm.waitForEvent(event, State.EXTEND_ARM);
+                        break;
+                    case EXTEND_ARM:
+                        event.reset();
+
+                        robot.grabberArm.extend(event, 2.0);
+
+                        sm.waitForEvent(event, State.GRAB_STONE);
+                        break;
+                    case GRAB_STONE:
+                        event.reset();
+
+                        robot.stoneGrabber.setPosition(97);
+
+                        stopwatch.setTimer(1.0);
+
                         sm.waitForEvent(event, State.MOVE_TO_LOW_POSITION);
                         break;
                     case MOVE_TO_LOW_POSITION:
                         event.reset();
-                        robot.grabberArm.lowPosition(null,2.0);
+
+                        robot.grabberArm.lowPosition(event,2.0);
+
                         sm.waitForEvent(event, State.END);
                         break;
                     case MOVE_TO_FOUNDATION:
