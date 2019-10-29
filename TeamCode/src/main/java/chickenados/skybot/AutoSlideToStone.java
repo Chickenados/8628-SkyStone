@@ -91,6 +91,7 @@ public class AutoSlideToStone extends LinearOpMode {
                         event.reset();
                         robot.stoneGrabber.setPosition(0);
                         robot.pidDrive.driveDistanceTank(22,0,2.0, event);
+                        robot.getSkystonePose();
                         sm.waitForEvent(event, State.TURN_TO_STONE);
                     case SEARCH:
                         event.reset();
