@@ -69,13 +69,14 @@ AutoSlideToStone extends LinearOpMode {
                 skystonePose = robot.getSkystonePose();
                 if(skystonePose != null) {
                     robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
+                    sm.setState(State.TURN_TO_STONE);
                     if(skystonePose.x != 0){
                         event.set(true);
                         robot.vuforiaVision.setEnabled(false);
                         sm.setState(State.TURN_TO_STONE);
                     }
                 }
-                if(CknUtil.getCurrentTime() > 1.5 + searchStartTime){
+                if(CknUtil.getCurrentTime() > 4 + searchStartTime){
                     event.set(true);
                     robot.vuforiaVision.setEnabled(false);
                     sm.setState(State.TURN_TO_STONE);
@@ -90,8 +91,8 @@ AutoSlideToStone extends LinearOpMode {
                     case MOVE_FORWARD:
                         event.reset();
                         robot.stoneGrabber.setPosition(0);
-                        robot.pidDrive.driveDistanceTank(10,0,2.0, event);
-                        sm.waitForEvent(event, State.SEARCH);
+                        robot.pidDrive.driveDistanceTank(22,0,2.0, event);
+                        sm.waitForEvent(event, State.TURN_TO_STONE);
                     case SEARCH:
                         event.reset();
 
@@ -116,7 +117,7 @@ AutoSlideToStone extends LinearOpMode {
                         break;
                     case MOVE_AGAIN_TO_STONE:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(6, turnAmount, 2, event);
+                        robot.pidDrive.driveDistanceTank(-6, turnAmount, 2, event);
                         sm.waitForEvent(event, State.EXTEND_ARM);
                         break;
                     case EXTEND_ARM:
