@@ -14,7 +14,8 @@ import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
 @Autonomous(name = "Test Slide To Stone")
-public class AutoSlideToStone extends LinearOpMode {
+public class
+AutoSlideToStone extends LinearOpMode {
 
     CknTaskManager mgr = new CknTaskManager();
     CknSkyBot robot;
