@@ -67,7 +67,7 @@ AutoSlideToStone extends LinearOpMode {
             if(currentState == State.SEARCH){
 
                 skystonePose = robot.getSkystonePose();
-                if(skystonePose != null) {
+                if(skystonePose != null)
                     robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
                     sm.setState(State.TURN_TO_STONE);
                     if(skystonePose.x != 0){
