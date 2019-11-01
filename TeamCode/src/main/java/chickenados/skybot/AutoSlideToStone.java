@@ -96,7 +96,7 @@ public class AutoSlideToStone extends LinearOpMode {
 
                         searchStartTime = CknUtil.getCurrentTime();
 
-                        sm.setState(State.TURN_TO_STONE);
+                        //sm.setState(State.TURN_TO_STONE);
                         break;
                     case TURN_TO_STONE:
                         event.reset();
