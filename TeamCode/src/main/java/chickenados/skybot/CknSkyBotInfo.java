@@ -55,13 +55,16 @@ public class CknSkyBotInfo {
     public static final int ENCODER_TICKS_PER_REV = 520;
     public static final double GEAR_RATIO = 1;
 
-    public static final double Y_ENCODER_PID_P = 0.00095;
+    public static final double Y_ENCODER_PID_P = 0.05;
     public static final double Y_ENCODER_PID_I = 0.0;
     public static final double Y_ENCODER_PID_D = 0.0;
+    public static final double Y_ENCODER_SCALE = .0112199738;
 
-    public static final double X_ENCODER_PID_P = 0.00095;
+
+    public static final double X_ENCODER_PID_P = 0.1;
     public static final double X_ENCODER_PID_I = 0.0;
     public static final double X_ENCODER_PID_D = 0.0;
+    public static final double X_ENCODER_SCALE = 1.0;
 
     public static final double TURN_PID_P = 0.025;
     public static final double TURN_PID_I = 0.0;

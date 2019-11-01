@@ -86,13 +86,12 @@ public class CknLocationTracker implements CknTaskManager.Task {
 
                     //Average out the two values from both sides, this isn't a real
                     // y position, just the distance the robot travels.
-                    double yPos = (leftEncoder + rightEncoder) / 2;
-                    // Convert to inches
-                    yPos = yPos / ((((3.1415 * driveBase.getWheelDiameter())) / driveBase.getTicksPerRev()) * driveBase.getGearRatio());
+                    double yPos = driveBase.getYScale() * ((leftEncoder + rightEncoder) / 2);
+
                     // Convert to other unit if needed.
-                    if(params.positionUnit != INCHES){
+                    /*if(params.positionUnit != INCHES){
                         yPos = CknUnitConverter.getInstance().convertValue(INCHES, params.positionUnit, yPos);
-                    }
+                    }*/
                     location.y = yPos;
 
                 }
@@ -117,10 +116,10 @@ public class CknLocationTracker implements CknTaskManager.Task {
                     double enc3 = driveBase.getEncoderValue(CknDriveBase.MotorType.REAR_LEFT);
                     double enc4 = driveBase.getEncoderValue(CknDriveBase.MotorType.REAR_RIGHT);
 
-                    location.y = (enc1 + enc2 + enc3 + enc4) / 4;
+                    location.y = driveBase.getYScale() * ((enc1 + enc2 + enc3 + enc4) / 4);
 
                     if(driveBase.getMode() == CknDriveBase.DriveType.MECANUM) {
-                        location.x = ((enc1 + enc4) - (enc2 + enc3)) / 4;
+                        location.x = driveBase.getXScale() * (((enc1 + enc4) - (enc2 + enc3)) / 4);
                     }
                 }
 

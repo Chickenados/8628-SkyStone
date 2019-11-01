@@ -113,6 +113,7 @@ public class CknSkyBot extends CknRobot {
 
         driveBase = new CknDriveBase(frontLeft, frontRight, rearLeft, rearRight, params);
         driveBase.setMode(CknDriveBase.DriveType.TANK);
+        driveBase.setPositionScale(CknSkyBotInfo.X_ENCODER_SCALE, CknSkyBotInfo.Y_ENCODER_SCALE);
 
         //
         // Location Tracking subsystem

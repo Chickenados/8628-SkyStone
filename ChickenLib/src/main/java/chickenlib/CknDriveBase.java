@@ -48,6 +48,9 @@ public class CknDriveBase {
 
     //Other info
     private double speed = 1.0;
+    private double xScale = 1.0;
+    private double yScale = 1.0;
+
 
     /**
      *  Initialize the motors to be used in the drive train.
@@ -95,6 +98,19 @@ public class CknDriveBase {
 
     public CknDriveBase(DcMotor frontLeft, DcMotor frontRight, Parameters params){
         this(frontLeft, frontRight, null, null, params);
+    }
+
+    public void setPositionScale(double xScale, double yScale){
+        this.xScale = xScale;
+        this.yScale = yScale;
+    }
+
+    public double getXScale(){
+        return xScale;
+    }
+
+    public double getYScale(){
+        return yScale;
     }
 
     /**

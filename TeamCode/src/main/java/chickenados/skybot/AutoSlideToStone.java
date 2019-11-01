@@ -20,8 +20,9 @@ public class AutoSlideToStone extends LinearOpMode {
     CknSkyBot robot;
 
     enum State{
-        MOVE_FORWARD,
-        SEARCH,
+        MOVE_FORWARD_TO_SCAN,
+        MOVE_FORWARD_FROM_SCAN,
+        SCAN,
         TURN_TO_STONE,
         MOVE_AGAIN_TO_STONE,
         EXTEND_ARM,
@@ -29,6 +30,7 @@ public class AutoSlideToStone extends LinearOpMode {
         MOVE_TO_LOW_POSITION,
         BACK_UP,
         MOVE_TO_FOUNDATION,
+        DROP_STONE,
         COME_BACK,
         GO_TO_STONE,
         PICK_UP_STONE,
@@ -57,7 +59,7 @@ public class AutoSlideToStone extends LinearOpMode {
 
         robot = new CknSkyBot(hardwareMap, telemetry, true);
 
-        sm.start(State.MOVE_FORWARD);
+        sm.start(State.MOVE_FORWARD_TO_SCAN);
 
         waitForStart();
 
@@ -70,23 +72,8 @@ public class AutoSlideToStone extends LinearOpMode {
             robot.dashboard.setLine(1, "State: " + currentState);
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
-            if(currentState == State.SEARCH){
-
+            if(sm.getState() == State.SCAN){
                 skystonePose = robot.getSkystonePose();
-                if(skystonePose != null) {
-                    robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
-                    sm.setState(State.TURN_TO_STONE);
-                    if(skystonePose.x != 0){
-                        event.set(true);
-                        robot.vuforiaVision.setEnabled(false);
-                        sm.setState(State.TURN_TO_STONE);
-                    }
-                }
-                if(CknUtil.getCurrentTime() > 4 + searchStartTime){
-                    event.set(true);
-                    robot.vuforiaVision.setEnabled(false);
-                    sm.setState(State.TURN_TO_STONE);
-                }
             }
 
             if(sm.isReady()) {
@@ -94,18 +81,26 @@ public class AutoSlideToStone extends LinearOpMode {
                 currentState = sm.getState();
 
                 switch (currentState) {
-                    case MOVE_FORWARD:
+                    case MOVE_FORWARD_TO_SCAN:
                         event.reset();
                         robot.stoneGrabber.setPosition(0);
-                        robot.pidDrive.driveDistanceTank(22.0,0,2.0, event);
-                        robot.getSkystonePose();
-                        sm.waitForEvent(event, State.TURN_TO_STONE);
-                    case SEARCH:
+                        robot.pidDrive.driveDistanceTank(14.0,0,2.0, event);
+                        sm.waitForEvent(event, State.SCAN);
+                        break;
+                    case SCAN:
                         event.reset();
 
-                        searchStartTime = CknUtil.getCurrentTime();
+                        stopwatch.setTimer(0.5);
 
-                        //sm.setState(State.TURN_TO_STONE);
+                        sm.waitForEvent(event, State.MOVE_FORWARD_FROM_SCAN);
+                        break;
+                    case MOVE_FORWARD_FROM_SCAN:
+                        event.reset();
+
+                        skystonePose = robot.getSkystonePose();
+                        robot.pidDrive.driveDistanceTank(5.0,0,2.0, event);
+
+                        sm.waitForEvent(event, State.TURN_TO_STONE);
                         break;
                     case TURN_TO_STONE:
                         event.reset();
@@ -128,7 +123,7 @@ public class AutoSlideToStone extends LinearOpMode {
                         break;
                     case MOVE_AGAIN_TO_STONE:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(10, turnAmount, 2, event);
+                        robot.pidDrive.driveDistanceTank(11, turnAmount, 2, event);
                         sm.waitForEvent(event, State.GRAB_STONE);
                         break;
                     case GRAB_STONE:
@@ -154,15 +149,23 @@ public class AutoSlideToStone extends LinearOpMode {
                         break;
                     case MOVE_TO_FOUNDATION:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(60, -90,2, event);
+                        robot.pidDrive.driveDistanceTank(40, -90,2, event);
+
+                        sm.waitForEvent(event, State.DROP_STONE);
+                        break;
+                    case DROP_STONE:
+                        event.reset();
+
                         robot.stoneGrabber.setPosition(0);
+                        stopwatch.setTimer(0.3);
+
                         sm.waitForEvent(event, State.COME_BACK);
                         break;
                     case COME_BACK:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(-60,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(-40,-90,2,event);
 
-                        sm.waitForEvent(event, State.GO_TO_STONE);
+                        sm.waitForEvent(event, State.END);
                     case GO_TO_STONE:
                         event.reset();
 
