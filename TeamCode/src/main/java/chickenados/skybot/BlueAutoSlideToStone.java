@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 
-import chickenados.testbot.CknTestBotAuto;
 import chickenlib.CknStateMachine;
 import chickenlib.CknTaskManager;
 import chickenlib.location.CknPose;
@@ -13,14 +12,8 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
-<<<<<<< HEAD
-@Autonomous(name = "Test Slide To Stone")
-public class
-AutoSlideToStone extends LinearOpMode {
-=======
-@Autonomous(name = "RED Slide To Stone")
-public class AutoSlideToStone extends LinearOpMode {
->>>>>>> b9436b8c4f24ca54770b8758a6641a85133cfd24
+@Autonomous(name = "BLUE Slide To Stone")
+public class BlueAutoSlideToStone extends LinearOpMode {
 
     CknTaskManager mgr = new CknTaskManager();
     CknSkyBot robot;
@@ -84,23 +77,6 @@ public class AutoSlideToStone extends LinearOpMode {
 
             if(sm.getState() == State.SCAN){
                 skystonePose = robot.getSkystonePose();
-<<<<<<< HEAD
-                if(skystonePose != null)
-                    robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
-                    sm.setState(State.TURN_TO_STONE);
-                    if(skystonePose.x != 0){
-                        event.set(true);
-                        robot.vuforiaVision.setEnabled(false);
-                        sm.setState(State.TURN_TO_STONE);
-                    }
-                }
-                if(CknUtil.getCurrentTime() > 4 + searchStartTime){
-                    event.set(true);
-                    robot.vuforiaVision.setEnabled(false);
-                    sm.setState(State.TURN_TO_STONE);
-                }
-=======
->>>>>>> b9436b8c4f24ca54770b8758a6641a85133cfd24
             }
 
             if(sm.isReady()) {
@@ -170,12 +146,12 @@ public class AutoSlideToStone extends LinearOpMode {
                         break;
                     case BACK_UP:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(-11, -90,2, event);
+                        robot.pidDrive.driveDistanceTank(-11, 90,2, event);
                         sm.waitForEvent(event, State.MOVE_TO_FOUNDATION);
                         break;
                     case MOVE_TO_FOUNDATION:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(40, -90,2, event);
+                        robot.pidDrive.driveDistanceTank(40, 90,2, event);
 
                         sm.waitForEvent(event, State.DROP_STONE);
                         break;
@@ -190,14 +166,14 @@ public class AutoSlideToStone extends LinearOpMode {
                     case COME_BACK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-40,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(-40,90,2,event);
 
                         sm.waitForEvent(event, State.MOVE_FROM_WALL);
                         break;
                     case MOVE_FROM_WALL:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(5,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(5,90,2,event);
 
                         sm.waitForEvent(event, State.TURN_TO_STONE2);
                         break;
@@ -247,14 +223,14 @@ public class AutoSlideToStone extends LinearOpMode {
                     case STONE2_TURN_TO_FOUNDATION:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(0, -90, 2, event);
+                        robot.pidDrive.driveDistanceTank(0, 90, 2, event);
 
                         sm.waitForEvent(event, State.STONE2_MOVE_TO_FOUNDATION);
                         break;
                     case STONE2_MOVE_TO_FOUNDATION:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(45, -90, 2, event);
+                        robot.pidDrive.driveDistanceTank(45, 90, 2, event);
 
                         sm.waitForEvent(event, State.STONE2_RELEASE);
                         break;
@@ -269,7 +245,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case BACK_AND_PARK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-12, -90, 2, event);
+                        robot.pidDrive.driveDistanceTank(-12, 90, 2, event);
 
                         sm.waitForEvent(event, State.END);
                         break;

@@ -14,11 +14,16 @@ public class CknPIDDrive implements CknTaskManager.Task{
 
     double startTime;
     double timeout;
+    double targetScale = 1;
 
     public CknPIDDrive(CknDriveBase driveBase, CknPIDController yPid, CknPIDController turnPid){
         this.driveBase = driveBase;
         this.yPid = yPid;
         this.turnPid = turnPid;
+    }
+
+    public void setTargetScale(double scale){
+        this.targetScale = scale;
     }
 
     public void driveStraightTankLoop(double distance, double heading, double timeout, CknEvent event){
@@ -31,7 +36,7 @@ public class CknPIDDrive implements CknTaskManager.Task{
         double startTime = CknUtil.getCurrentTime();
 
         //Convert the distance from inches to encoder ticks.
-        double target = distance / ((3.1415 * driveBase.getWheelDiameter()) / driveBase.getTicksPerRev());
+        double target = distance * targetScale;
 
         yPid.setSetPoint(target, true);
         //turnPid.setSetPoint(heading);
@@ -66,7 +71,7 @@ public class CknPIDDrive implements CknTaskManager.Task{
         startTime = CknUtil.getCurrentTime();
 
         //Convert the distance from inches to encoder ticks.
-        double target = distance / ((((3.1415 * driveBase.getWheelDiameter())) / driveBase.getTicksPerRev()) * driveBase.getGearRatio());
+        double target = distance;
 
         yPid.setSetPoint(target, true);
         turnPid.setSetPoint(heading, false);
