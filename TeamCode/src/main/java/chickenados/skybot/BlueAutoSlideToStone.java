@@ -31,6 +31,8 @@ public class BlueAutoSlideToStone extends LinearOpMode {
         MOVE_TO_FOUNDATION,
         DROP_STONE,
         COME_BACK,
+        RETRACT,
+        PARK,
         MOVE_FROM_WALL,
         TURN_TO_STONE2,
         LOWER_ARM,
@@ -161,9 +163,32 @@ public class BlueAutoSlideToStone extends LinearOpMode {
                         robot.stoneGrabber.setPosition(0);
                         stopwatch.setTimer(0.3);
 
-                        sm.waitForEvent(event, State.COME_BACK);
+                        sm.waitForEvent(event, State.RETRACT);
                         break;
-                    case COME_BACK:
+
+                    case RETRACT:
+                        event.reset();
+
+                        robot.grabberArm.retract(event, 2);
+
+                        sm.waitForEvent(event, State.PARK);
+
+                        break;
+                    case PARK:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-6,90,2,event);
+
+                        sm.waitForEvent(event, State.END
+
+
+
+
+
+                        );
+                        break;
+
+                    /*case COME_BACK:
                         event.reset();
 
                         robot.pidDrive.driveDistanceTank(-40,90,2,event);
@@ -248,7 +273,7 @@ public class BlueAutoSlideToStone extends LinearOpMode {
                         robot.pidDrive.driveDistanceTank(-12, 90, 2, event);
 
                         sm.waitForEvent(event, State.END);
-                        break;
+                        break;*/
                     case END:
                         robot.vuforiaVision.setEnabled(false);
                         event.reset();

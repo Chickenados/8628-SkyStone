@@ -21,6 +21,9 @@ public class RetreiveFoundation extends LinearOpMode {
         BACK,
         LIFT_ARM,
         BACK_AGAIN,
+        RETRACT,
+        PUSH,
+        REVERSE,
         END;
 
     }
@@ -55,6 +58,8 @@ public class RetreiveFoundation extends LinearOpMode {
                 currentState = sm.getState();
 
                 switch (currentState) {
+
+
                     case FORWARD:
                         event.reset();
 
@@ -72,7 +77,7 @@ public class RetreiveFoundation extends LinearOpMode {
                     case BACK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-16, 0, 2.0, event);
+                        robot.pidDrive.driveDistanceTank(-23, 0, 2.0, event);
 
                         sm.waitForEvent(event, State.LIFT_ARM);
                         break;
@@ -88,8 +93,30 @@ public class RetreiveFoundation extends LinearOpMode {
 
                         robot.pidDrive.driveDistanceTank(-4, 0, 2, event);
 
+                        sm.waitForEvent(event, State.RETRACT);
+                        break;
+                    case RETRACT:
+                        event.reset();
+
+                        robot.grabberArm.retract(event,2 );
+
+                        sm.waitForEvent(event, State.PUSH);
+                        break;
+                    case PUSH:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(6,0,2, event);
+
+                        sm.waitForEvent(event, State.REVERSE);
+                        break;
+                    case REVERSE:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-7,0,2,event);
+
                         sm.waitForEvent(event, State.END);
                         break;
+
                     case END:
                         event.reset();
                         sm.stop();

@@ -13,19 +13,13 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
-<<<<<<< HEAD
-@Autonomous(name = "Test Slide To Stone")
-public class
-AutoSlideToStone extends LinearOpMode {
-=======
 @Autonomous(name = "RED Slide To Stone")
 public class AutoSlideToStone extends LinearOpMode {
->>>>>>> b9436b8c4f24ca54770b8758a6641a85133cfd24
 
     CknTaskManager mgr = new CknTaskManager();
     CknSkyBot robot;
 
-    enum State{
+    enum State {
         MOVE_FORWARD_TO_SCAN,
         MOVE_FORWARD_FROM_SCAN,
         SCAN,
@@ -37,7 +31,12 @@ public class AutoSlideToStone extends LinearOpMode {
         BACK_UP,
         MOVE_TO_FOUNDATION,
         DROP_STONE,
+        TURN,
+        MOVE_FORWARD,
         COME_BACK,
+        TURN_BACK,
+        RETRACT,
+        PARK,
         MOVE_FROM_WALL,
         TURN_TO_STONE2,
         LOWER_ARM,
@@ -65,7 +64,7 @@ public class AutoSlideToStone extends LinearOpMode {
     double turnAmount;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
 
         robot = new CknSkyBot(hardwareMap, telemetry, true);
 
@@ -75,42 +74,25 @@ public class AutoSlideToStone extends LinearOpMode {
 
         robot.vuforiaVision.setEnabled(true);
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
             CknUtil.CknLoopCounter.getInstance().loop++;
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
 
             robot.dashboard.setLine(1, "State: " + currentState);
             robot.dashboard.setLine(2, "Event: " + event.isTriggered());
 
-            if(sm.getState() == State.SCAN){
+            if (sm.getState() == State.SCAN) {
                 skystonePose = robot.getSkystonePose();
-<<<<<<< HEAD
-                if(skystonePose != null)
-                    robot.dashboard.setLine(3, "Location X: " + skystonePose.x + " Y: " + skystonePose.y);
-                    sm.setState(State.TURN_TO_STONE);
-                    if(skystonePose.x != 0){
-                        event.set(true);
-                        robot.vuforiaVision.setEnabled(false);
-                        sm.setState(State.TURN_TO_STONE);
-                    }
-                }
-                if(CknUtil.getCurrentTime() > 4 + searchStartTime){
-                    event.set(true);
-                    robot.vuforiaVision.setEnabled(false);
-                    sm.setState(State.TURN_TO_STONE);
-                }
-=======
->>>>>>> b9436b8c4f24ca54770b8758a6641a85133cfd24
             }
 
-            if(sm.isReady()) {
+            if (sm.isReady()) {
 
                 currentState = sm.getState();
 
                 switch (currentState) {
                     case MOVE_FORWARD_TO_SCAN:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(9.0,0,2.0, event);
+                        robot.pidDrive.driveDistanceTank(9.0, 0, 2.0, event);
                         sm.waitForEvent(event, State.TURN_TO_STONE);
                         break;
                     case SCAN:
@@ -131,13 +113,13 @@ public class AutoSlideToStone extends LinearOpMode {
                     case TURN_TO_STONE:
                         event.reset();
 
-                        if(skystonePose != null){
-                            turnAmount = Math.toDegrees(Math.atan(skystonePose.y/skystonePose.x));
+                        if (skystonePose != null) {
+                            turnAmount = Math.toDegrees(Math.atan(skystonePose.y / skystonePose.x));
                         } else {
                             turnAmount = 0;
                         }
 
-                        robot.pidDrive.driveDistanceTank(0, turnAmount,2, event);
+                        robot.pidDrive.driveDistanceTank(0, turnAmount, 2, event);
                         sm.waitForEvent(event, State.EXTEND_ARM);
                         break;
                     case EXTEND_ARM:
@@ -164,47 +146,71 @@ public class AutoSlideToStone extends LinearOpMode {
                     case MOVE_TO_LOW_POSITION:
                         event.reset();
 
-                        robot.grabberArm.lowPosition(event,2.0);
+                        robot.grabberArm.lowPosition(event, 2.0);
 
                         sm.waitForEvent(event, State.BACK_UP);
                         break;
                     case BACK_UP:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(-11, -90,2, event);
+                        robot.pidDrive.driveDistanceTank(-11, -90, 2, event);
                         sm.waitForEvent(event, State.MOVE_TO_FOUNDATION);
                         break;
                     case MOVE_TO_FOUNDATION:
                         event.reset();
-                        robot.pidDrive.driveDistanceTank(40, -90,2, event);
+                        robot.pidDrive.driveDistanceTank(40, -90, 2, event);
 
                         sm.waitForEvent(event, State.DROP_STONE);
                         break;
+
+                    case TURN:
+                        event.reset();
+                        robot.pidDrive.driveDistanceTank(2,90,2,event);
+                        sm.waitForEvent(event,State.MOVE_FORWARD);
+                        break;
+
+                    case MOVE_FORWARD:
+                        event.reset();
+                        robot.pidDrive.driveDistanceTank(2,90,2,event);
+
+                        sm.waitForEvent(event,State.DROP_STONE);
                     case DROP_STONE:
                         event.reset();
 
                         robot.stoneGrabber.setPosition(0);
                         stopwatch.setTimer(0.3);
 
-                        sm.waitForEvent(event, State.COME_BACK);
+                        sm.waitForEvent(event, State.RETRACT);
                         break;
-                    case COME_BACK:
+                   /* case TURN_BACK:
+                        event.reset();
+                        robot.pidDrive.driveDistanceTank(2,-90,2,event);
+                                sm.waitForEvent(event,State.RETRACT);
+                        break;
+
+*/
+
+
+
+
+                        //SORRY commenting this out to test
+                   /* case COME_BACK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-40,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(-38, -90, 2, event);
 
                         sm.waitForEvent(event, State.MOVE_FROM_WALL);
                         break;
                     case MOVE_FROM_WALL:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(5,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(3, -90, 2, event);
 
                         sm.waitForEvent(event, State.TURN_TO_STONE2);
                         break;
                     case TURN_TO_STONE2:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(0,0,2,event);
+                        robot.pidDrive.driveDistanceTank(0, 0, 2, event);
 
                         sm.waitForEvent(event, State.LOWER_ARM);
                         break;
@@ -218,7 +224,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case FORWARD_TO_STONE2:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(5,0,2,event);
+                        robot.pidDrive.driveDistanceTank(5, 0, 2, event);
 
                         sm.waitForEvent(event, State.GRAB_STONE2);
                         break;
@@ -240,7 +246,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case BACK_FROM_STONE2:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-11, 0,2, event);
+                        robot.pidDrive.driveDistanceTank(-11, 0, 2, event);
 
                         sm.waitForEvent(event, State.STONE2_TURN_TO_FOUNDATION);
                         break;
@@ -264,12 +270,131 @@ public class AutoSlideToStone extends LinearOpMode {
                         robot.stoneGrabber.setPosition(0);
                         stopwatch.setTimer(.7);
 
+                        sm.waitForEvent(event, State.RETRACT);
+                        break;*/
+                    /*case RETRACT:
+                        event.reset();
+
+                        robot.grabberArm.retract(event, 2);
+
+                        sm.waitForEvent(event, State.PARK);
+                        break;
+                    case PARK:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-6,-90,2,event);
+
+                        sm.waitForEvent(event, State.END);
+                        break;*/
+
+
+                   /*case COME_BACK:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-40, -90, 2, event);
+
+                        sm.waitForEvent(event, State.MOVE_FROM_WALL);
+                        break;
+                    case MOVE_FROM_WALL:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(5, -90, 2, event);
+
+                        sm.waitForEvent(event, State.TURN_TO_STONE2);
+                        break;
+                    case TURN_TO_STONE2:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(0, 0, 2, event);
+
+                        sm.waitForEvent(event, State.LOWER_ARM);
+                        break;
+                    case LOWER_ARM:
+                        event.reset();
+
+                        robot.grabberArm.extend(event, 2.0);
+
+                        sm.waitForEvent(event, State.FORWARD_TO_STONE2);
+                        break;
+                    case FORWARD_TO_STONE2:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(5, 0, 2, event);
+
+                        sm.waitForEvent(event, State.GRAB_STONE2);
+                        break;
+                    case GRAB_STONE2:
+                        event.reset();
+
+                        robot.stoneGrabber.setPosition(97);
+                        stopwatch.setTimer(1.2);
+
+                        sm.waitForEvent(event, State.STONE2_LOW_POSITION);
+                        break;
+                    case STONE2_LOW_POSITION:
+                        event.reset();
+
+                        robot.grabberArm.lowPosition(event, 2.0);
+
+                        sm.waitForEvent(event, State.BACK_FROM_STONE2);
+                        break;
+
+
+
+                    case BACK_FROM_STONE2:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-11, 0, 2, event);
+
+                        sm.waitForEvent(event, State.STONE2_TURN_TO_FOUNDATION);
+                        break;
+                    case STONE2_TURN_TO_FOUNDATION:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(0, -90, 2, event);
+
+                        sm.waitForEvent(event, State.STONE2_MOVE_TO_FOUNDATION);
+                        break;
+                    case STONE2_MOVE_TO_FOUNDATION:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(45, -90, 2, event);
+
+                        sm.waitForEvent(event, State.STONE2_RELEASE);
+                        break;
+                    case STONE2_RELEASE:
+                        event.reset();
+
+                        robot.stoneGrabber.setPosition(0);
+                        stopwatch.setTimer(.7);
+
+                        sm.waitForEvent(event, State.RETRACT);
+                        break;*/
+                    /*case RETRACT:
+                        event.reset();
+
+                        robot.grabberArm.retract(event,2 );
+
                         sm.waitForEvent(event, State.BACK_AND_PARK);
                         break;
                     case BACK_AND_PARK:
                         event.reset();
 
                         robot.pidDrive.driveDistanceTank(-12, -90, 2, event);
+
+                        sm.waitForEvent(event, State.END);
+                        break;*/
+                    case RETRACT:
+                        event.reset();
+
+                        robot.grabberArm.retract(event, 2);
+
+                        sm.waitForEvent(event, State.PARK);
+                        break;
+                    case PARK:
+                        event.reset();
+
+                        robot.pidDrive.driveDistanceTank(-6,-90,2,event);
 
                         sm.waitForEvent(event, State.END);
                         break;
@@ -280,7 +405,6 @@ public class AutoSlideToStone extends LinearOpMode {
                         break;
                 }
             }
-
 
 
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
