@@ -72,7 +72,7 @@ public class RetreiveFoundation extends LinearOpMode {
                     case BACK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-16, 0, 2.0, event);
+                        robot.pidDrive.driveDistanceTank(-20, 0, 2.0, event);
 
                         sm.waitForEvent(event, State.LIFT_ARM);
                         break;
