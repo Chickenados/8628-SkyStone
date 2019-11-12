@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class TestBot {
+public class
+TestBot {
 
     //
     // Drive Train Motors
@@ -36,3 +37,5 @@ public class TestBot {
 
 
 }
+
+
