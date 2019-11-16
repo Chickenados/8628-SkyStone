@@ -3,7 +3,6 @@ package chickenados.skybot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import chickenados.testbot.CknTestBot;
 import chickenlib.CknTaskManager;
 import chickenlib.util.CknUtil;
 

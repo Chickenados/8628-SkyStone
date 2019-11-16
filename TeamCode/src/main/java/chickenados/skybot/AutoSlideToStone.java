@@ -66,7 +66,7 @@ public class AutoSlideToStone extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        robot = new CknSkyBot(hardwareMap, telemetry, true);
+         robot = new CknSkyBot(hardwareMap, telemetry, true);
 
         sm.start(State.MOVE_FORWARD_TO_SCAN);
 
@@ -98,7 +98,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case SCAN:
                         event.reset();
 
-                        stopwatch.setTimer(0.5);
+                        stopwatch.setTimer(5);
 
                         sm.waitForEvent(event, State.MOVE_FORWARD_FROM_SCAN);
                         break;
@@ -132,7 +132,7 @@ public class AutoSlideToStone extends LinearOpMode {
                     case MOVE_AGAIN_TO_STONE:
                         event.reset();
                         robot.pidDrive.driveDistanceTank(8, turnAmount, 2, event);
-                        sm.waitForEvent(event, State.GRAB_STONE);
+                        sm.waitForEvent(event, State.RETRACT);
                         break;
                     case GRAB_STONE:
                         event.reset();
@@ -389,12 +389,12 @@ public class AutoSlideToStone extends LinearOpMode {
 
                         robot.grabberArm.retract(event, 2);
 
-                        sm.waitForEvent(event, State.PARK);
+                        sm.waitForEvent(event, State.END);
                         break;
                     case PARK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-6,-90,2,event);
+                        robot.pidDrive.driveDistanceTank(-10,-135,2,event);
 
                         sm.waitForEvent(event, State.END);
                         break;

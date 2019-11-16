@@ -12,7 +12,7 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
-@Autonomous(name = "BLUE Slide To Stone")
+@Autonomous(name = "Blue Slide To Stone")
 public class BlueAutoSlideToStone extends LinearOpMode {
 
     CknTaskManager mgr = new CknTaskManager();
@@ -111,8 +111,8 @@ public class BlueAutoSlideToStone extends LinearOpMode {
 
                         if(skystonePose != null){
                             turnAmount = Math.toDegrees(Math.atan(skystonePose.y/skystonePose.x));
-                        } else {
-                            turnAmount = 0;
+                       // } else {
+                         //   turnAmount = 0;
                         }
 
                         robot.pidDrive.driveDistanceTank(0, turnAmount,2, event);
@@ -177,11 +177,9 @@ public class BlueAutoSlideToStone extends LinearOpMode {
                     case PARK:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-6,90,2,event);
+                        robot.pidDrive.driveDistanceTank(-10,135,2,event);
 
                         sm.waitForEvent(event, State.END
-
-
 
 
 
