@@ -39,52 +39,25 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+
+
 public class TileRunner extends CknRobot {
-    HardwareMap hwMap;
-    boolean useVuforia;
+
 
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
 
-    public TileRunner(HardwareMap hwMap, Telemetry telemetry) {
-        this(hwMap, telemetry, false);
-    }
+    //Drivetrain subsystem
+    public CknDriveBase driveBase;
+    public CknLocationTracker locationTracker;
 
-    public TileRunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia) {
+    public CknSmartDashboard dashboard;
 
-        this.hwMap = hwMap;
-
-        this.useVuforia = useVuforia;
-
-        //Drivetrain subsystem
-        CknDriveBase driveBase;
-        CknPIDDrive pidDrive;
-        CknLocationTracker locationTracker;
-
-        CknPIDController yPid;
-        CknPIDController turnPid;
-
-        CknBNO055IMU imu;
-
-
-
-        //Set motors to braking
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+    public TileRunner(HardwareMap hwMap) {
 
         CknDriveBase.Parameters params = new CknDriveBase.Parameters();
-        params.driveTypes.add(CknDriveBase.DriveType.TANK);
-        params.driveTypes.add(CknDriveBase.DriveType.ARCADE);
-        params.driveTypes.add(CknDriveBase.DriveType.MECANUM);
-        params.ticksPerRev = TileRunnerInfo.ENCODER_TICKS_PER_REV;
-        params.gearRatio = TileRunnerInfo.GEAR_RATIO;
-        params.wheelDiameter = TileRunnerInfo.WHEEL_DIAMETER_INCHES;
-
         driveBase = new CknDriveBase(frontLeft, frontRight, backLeft, backRight, params);
         driveBase.setMode(CknDriveBase.DriveType.TANK);
         driveBase.setPositionScale(TileRunnerInfo.X_ENCODER_SCALE, TileRunnerInfo.Y_ENCODER_SCALE);

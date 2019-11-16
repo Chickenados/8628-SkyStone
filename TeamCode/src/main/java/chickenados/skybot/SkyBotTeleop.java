@@ -46,6 +46,11 @@ public class SkyBotTeleop extends LinearOpMode {
             } else if(gamepad1.b){
                 robot.stoneGrabber.setPosition(97);
             }
+            if(gamepad1.a){
+                robot.stoneGrabber.setPosition(0);
+            } else if(gamepad1.b){
+                robot.stoneGrabber.setPosition(97);
+            }
 
 
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
