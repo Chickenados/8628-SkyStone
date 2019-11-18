@@ -57,6 +57,20 @@ public class SkybotGrabberArm implements CknTaskManager.Task {
         setTaskEnabled(true);
     }
 
+
+    //Manually move arm with controller to calibrate zero position
+    public void manualControl(double motorPower){
+        setTaskEnabled(false);
+        armMotor.setPower(motorPower);
+    }
+
+    //Set zero position
+    public void calibrateZeroPosition(){
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.motorPosition = armMotor.getCurrentPosition();
+    }
+
     public void stop(){
         setTaskEnabled(false);
         armMotor.setPower(0);

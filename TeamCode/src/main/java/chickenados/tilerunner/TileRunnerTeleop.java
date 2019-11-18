@@ -1,9 +1,9 @@
-package chickenados.testbot;
-
-import android.service.quicksettings.Tile;
+package chickenados.tilerunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import chickenados.tilerunner.TileRunner;
 
 @TeleOp(name = "TileRunner Teleop", group = "TileRunner")
 public class TileRunnerTeleop extends LinearOpMode {
