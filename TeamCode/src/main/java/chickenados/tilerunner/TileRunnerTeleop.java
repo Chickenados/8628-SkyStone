@@ -22,7 +22,7 @@ public class TileRunnerTeleop extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
+            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x);
 
         }
 
