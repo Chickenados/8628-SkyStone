@@ -62,7 +62,7 @@ public class SkyBotTeleop extends LinearOpMode {
             } else if(gamepad1.b){
                 robot.stoneGrabber.setPosition(97);
             }
-            
+
             //
             //  GAMEPAD 2
             //
