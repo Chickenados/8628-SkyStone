@@ -61,6 +61,10 @@ public class CknSkyBot extends CknRobot {
     SkybotGrabberArm grabberArm;
     CknPIDController grabberPid;
 
+    //foundation subsystem
+    Servo frontFoundation;
+    Servo sideFoundation;
+
     Servo stoneGrabber;
 
     public CknSmartDashboard dashboard;

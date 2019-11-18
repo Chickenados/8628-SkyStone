@@ -25,6 +25,8 @@ public class CknSkyBotInfo {
     // Grabber Subsystem
     //
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
+    public static final String FRONT_FOUNDATION = "frontFoundation";
+    public static final String SIDE_FOUNDATION = "sideFoundation";
 
     //port zero hub two -Anna
 

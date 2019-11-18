@@ -59,7 +59,7 @@ public class TileRunner extends CknRobot {
 
         CknDriveBase.Parameters params = new CknDriveBase.Parameters();
         driveBase = new CknDriveBase(frontLeft, frontRight, backLeft, backRight, params);
-        driveBase.setMode(CknDriveBase.DriveType.TANK);
+        driveBase.setMode(CknDriveBase.DriveType.MECANUM);
         driveBase.setPositionScale(TileRunnerInfo.X_ENCODER_SCALE, TileRunnerInfo.Y_ENCODER_SCALE);
 
     }

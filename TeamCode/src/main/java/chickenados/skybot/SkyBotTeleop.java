@@ -27,6 +27,7 @@ public class SkyBotTeleop extends LinearOpMode {
             robot.driveBase.mecanumDrive(-gamepad1.right_stick_y, -gamepad1.right_stick_x, gamepad1.left_stick_x);
 
             if(gamepad1.x){
+
                 robot.driveBase.setSpeed(CknSkyBotInfo.PRECISION_SPEED);
             } else robot.driveBase.setSpeed(CknSkyBotInfo.FULL_SPEED);
 
@@ -46,10 +47,18 @@ public class SkyBotTeleop extends LinearOpMode {
             } else if(gamepad1.b){
                 robot.stoneGrabber.setPosition(97);
             }
-            if(gamepad1.a){
-                robot.stoneGrabber.setPosition(0);
-            } else if(gamepad1.b){
-                robot.stoneGrabber.setPosition(97);
+
+            //adding to test
+            if(gamepad2.x){
+                robot.frontFoundation.setPosition(0);
+            } else if(gamepad2.y) {
+                robot.frontFoundation.setPosition(60);
+            }
+            if(gamepad2.a){
+                robot.sideFoundation.setPosition(0);
+            } else if(gamepad2.b) {
+                robot.sideFoundation.setPosition(60);
+
             }
 
 
