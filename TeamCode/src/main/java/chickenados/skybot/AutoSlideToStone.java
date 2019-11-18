@@ -13,7 +13,7 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
-@Autonomous(name = "RED Slide To Stone")
+@Autonomous(name = "RED Slide To Stone", group = "Skybot")
 public class AutoSlideToStone extends LinearOpMode {
 
     CknTaskManager mgr = new CknTaskManager();
