@@ -25,4 +25,9 @@ repositories {
     }
 }
 
+dependencies {
+    implementation files('/Users/Nate/8628-SkyStone/libs/commons-math3-3.6.1.jar')
+}
+
+
 apply from: 'build.release.gradle'
