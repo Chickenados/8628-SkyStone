@@ -188,6 +188,9 @@ public class CknSkyBot extends CknRobot {
 
         stoneGrabber = hwMap.servo.get(CknSkyBotInfo.STONE_GRABBER_NAME);
 
+        sideFoundation = hwMap.servo.get(CknSkyBotInfo.SIDE_FOUNDATION_NAME);
+        frontFoundation = hwMap.servo.get(CknSkyBotInfo.FRONT_FOUNDATION_NAME);
+
         if(useVuforia){
             initVuforia();
         }

@@ -48,6 +48,7 @@ public class SkyBotTeleop extends LinearOpMode {
                 robot.stoneGrabber.setPosition(97);
             }
 
+
             //adding to test
             if(gamepad2.x){
                 robot.frontFoundation.setPosition(0);
