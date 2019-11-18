@@ -28,6 +28,7 @@ public abstract class CknDriveBase {
 
     private CknPose2D odometry;
     private CknPose2D poseDelta;
+    protected double xScale, yScale, rotScale = 1.0;
 
     private DcMotor[] motors;
     private CknGyro gyro;
@@ -65,6 +66,29 @@ public abstract class CknDriveBase {
     }
 
     /**
+     * Returns the number of registered motors.
+     * @return
+     */
+    public int getNumMotors(){
+        final String funcName = "getNumMotors";
+
+        if (debugEnabled)
+        {
+            dbgTrace.traceEnter(funcName, CknDbgTrace.TraceLevel.API);
+            dbgTrace.traceExit(funcName, CknDbgTrace.TraceLevel.API, "=%d", motors.length);
+        }
+        return motors.length;
+    }
+
+    public abstract boolean supportsHolonomicDrive();
+
+    protected void holonomicDrive(double x, double y, double rotation, boolean inverted, double gyroAngle)
+    {
+        throw new UnsupportedOperationException("Holonomic drive is not supported by this drive base!");
+    }   //holonomicDrive
+
+
+    /**
      * Enables/Disables the odometry task.
      * @param enabled
      */
@@ -91,7 +115,7 @@ public abstract class CknDriveBase {
 
     }
 
-    public abstract CknPose2D getPoseDelta(MotorsState motorsState);
+    protected abstract CknPose2D getPoseDelta(MotorsState motorsState);
 
     /**
      * The main task method that tracks the location of the robot on the field.
@@ -132,17 +156,15 @@ public abstract class CknDriveBase {
                 //TODO: Implement gyro control.
             }
 
-            // Crea
+            // Transform delta x and delta y to a vector to calculate the actual change in x and y with heading.
             RealVector pos = MatrixUtils.createRealVector(new double[] { poseDelta.x, poseDelta.y });
-            RealVector vel = MatrixUtils.createRealVector(new double[] { poseDelta.xVel, poseDelta.yVel });
 
             pos = CknUtil.rotateCW(pos, odometry.heading);
-            vel = CknUtil.rotateCW(vel, odometry.heading);
 
             //Update the odometry values.
             odometry.heading += poseDelta.heading;
-            odometry.x += poseDelta.x;
-            odometry.y += poseDelta.y;
+            odometry.x += pos.getEntry(0);
+            odometry.y += pos.getEntry(1);
 
         }
 

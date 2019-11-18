@@ -103,6 +103,76 @@ public class CknUtil {
     }   //clipRange
 
     /**
+     * This method sums an array of numbers.
+     *
+     * @param nums specifies the array of numbers to be summed.
+     * @return sum of the numbers.
+     */
+    public static double sum(double... nums)
+    {
+        double total = 0.0;
+
+        for (double num : nums)
+        {
+            total += num;
+        }
+
+        return total;
+    }   //sum
+
+    /**
+     * This method calculates and returns the average of the numbers in the given array.
+     *
+     * @param nums specifies the number array.
+     * @return average of all numbers in the array. If the array is empty, return 0.
+     */
+    public static double average(double... nums)
+    {
+        return nums.length == 0 ? 0.0 : sum(nums) / nums.length;
+    }   //average
+
+    /**
+     * This method returns the maximum magnitude of numbers in the specified array.
+     *
+     * @param nums specifies the number array.
+     * @return maximum magnitude of the numbers in the array.
+     */
+    public static double maxMagnitude(double... nums)
+    {
+        double maxMag = Math.abs(nums[0]);
+
+        for (double num : nums)
+        {
+            double magnitude = Math.abs(num);
+            if (magnitude > maxMag)
+            {
+                maxMag = magnitude;
+            }
+        }
+
+        return maxMag;
+    }   //maxMagnitude
+
+    /**
+     * This method normalizes the given array of numbers such that no number exceeds +/- 1.0. If no number exceeds
+     * the magnitude of 1.0, nothing will change, otherwise the original nums array will be modified in place.
+     *
+     * @param nums specifies the number array.
+     */
+    public static void normalizeInPlace(double[] nums)
+    {
+        double maxMag = maxMagnitude(nums);
+
+        if (maxMag > 1.0)
+        {
+            for (int i = 0; i < nums.length; i++)
+            {
+                nums[i] /= maxMag;
+            }
+        }
+    }   //normalizeInPlace
+
+    /**
      * Rotate a point counter-clockwise about the origin.
      *
      * @param vector The vector to rotate.
