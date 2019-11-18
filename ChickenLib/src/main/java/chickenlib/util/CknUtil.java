@@ -61,27 +61,40 @@ public class CknUtil {
         return getTimestamp("yyyyMMdd@HHmmss");
     }   //getTimestamp
 
-    public static double round(double value, int places){
-        if(places < 0) throw new IllegalArgumentException("Attempted to round to illegal decimal places!");
+    /**
+     * This method clips the given value to the range limited by the given low and high limits.
+     *
+     * @param value     specifies the value to be clipped
+     * @param lowLimit  specifies the low limit of the range.
+     * @param highLimit specifies the high limit of the range.
+     * @return the result of the clipped value.
+     */
+    public static int clipRange(int value, int lowLimit, int highLimit)
+    {
+        return Math.min(Math.max(value, lowLimit), highLimit);
+    }   //clipRange
 
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
+    /**
+     * This method clips the given value to the range limited by the given low and high limits.
+     *
+     * @param value     specifies the value to be clipped
+     * @param lowLimit  specifies the low limit of the range.
+     * @param highLimit specifies the high limit of the range.
+     * @return the result of the clipped value.
+     */
+    public static double clipRange(double value, double lowLimit, double highLimit)
+    {
+        return Math.min(Math.max(value, lowLimit), highLimit);
+    }   //clipRange
 
-    public static class CknLoopCounter{
-
-        private static CknLoopCounter instance;
-
-        public static CknLoopCounter getInstance() {
-            if(instance == null){
-                instance = new CknLoopCounter();
-            }
-            return instance;
-        }
-
-        public long loop;
-
-        public long getLoopCount(){ return loop; }
-    }
+    /**
+     * This method clips the given value to the range between -1.0 and 1.0.
+     *
+     * @param value specifies the value to be clipped
+     * @return the result of the clipped value.
+     */
+    public static double clipRange(double value)
+    {
+        return clipRange(value, -1.0, 1.0);
+    }   //clipRange
 }
