@@ -1,10 +1,7 @@
 package chickenlib.util;
 
-import chickenlib.CknTaskManager;
-import chickenlib.inputstreams.CknInputStream;
 import chickenlib.logging.CknDbgLog;
 import chickenlib.sensor.CknSensor;
-import chickenlib.util.CknData;
 
 public class CknIntegrator<D> implements CknTaskManager.Task {
 
