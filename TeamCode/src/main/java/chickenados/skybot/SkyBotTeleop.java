@@ -3,7 +3,6 @@ package chickenados.skybot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import chickenados.testbot.CknTestBot;
 import chickenlib.CknTaskManager;
 import chickenlib.util.CknUtil;
 
@@ -63,7 +62,7 @@ public class SkyBotTeleop extends LinearOpMode {
             } else if(gamepad1.b){
                 robot.stoneGrabber.setPosition(97);
             }
-
+            
             //
             //  GAMEPAD 2
             //
@@ -72,12 +71,13 @@ public class SkyBotTeleop extends LinearOpMode {
             if(gamepad2.x){
                 robot.frontFoundation.setPosition(0);
             } else if(gamepad2.y) {
-                robot.frontFoundation.setPosition(97);
+                robot.frontFoundation.setPosition(60);
             }
             if(gamepad2.a){
                 robot.sideFoundation.setPosition(0);
             } else if(gamepad2.b) {
-                robot.sideFoundation.setPosition(97);
+                robot.sideFoundation.setPosition(60);
+
             }
 
 

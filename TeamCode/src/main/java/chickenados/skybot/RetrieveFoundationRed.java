@@ -9,8 +9,8 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStopwatch;
 import chickenlib.util.CknUtil;
 
-@Autonomous(name = "Grab Foundation Blue")
-public class RetreiveFoundation extends LinearOpMode {
+@Autonomous(name = "Grab Foundation Red")
+public class RetrieveFoundationRed extends LinearOpMode {
 
     CknTaskManager mgr = new CknTaskManager();
     CknSkyBot robot;
@@ -20,8 +20,8 @@ public class RetreiveFoundation extends LinearOpMode {
         FORWARD_AGAIN,
         GRAB,
         BACK,
-        TURN,
         LIFT_ARM,
+        TURN,
         MOVE,
         BACK_AGAIN,
         RETRACT,
@@ -94,7 +94,7 @@ public class RetreiveFoundation extends LinearOpMode {
                     case TURN:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(0, 15, 2.0, event);
+                        robot.pidDrive.driveDistanceTank(0, -15, 2.0, event);
 
                         sm.waitForEvent(event, State.LIFT_ARM);
                         break;
@@ -108,14 +108,14 @@ public class RetreiveFoundation extends LinearOpMode {
                     case MOVE:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(1,15,2.0,event);
+                        robot.pidDrive.driveDistanceTank(1,-15,2.0,event);
 
                         sm.waitForEvent(event, State.BACK_AGAIN);
                         break;
                     case BACK_AGAIN:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-4, 15, 2, event);
+                        robot.pidDrive.driveDistanceTank(-4, -15, 2, event);
 
                         sm.waitForEvent(event, State.RETRACT);
                         break;
@@ -129,14 +129,14 @@ public class RetreiveFoundation extends LinearOpMode {
                     case PUSH:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(2,15,2, event);
+                        robot.pidDrive.driveDistanceTank(2,-15,2, event);
 
                         sm.waitForEvent(event, State.REVERSE);
                         break;
                     case REVERSE:
                         event.reset();
 
-                        robot.pidDrive.driveDistanceTank(-7,0,2,event);
+                        robot.pidDrive.driveDistanceTank(-7,-0,2,event);
 
                         sm.waitForEvent(event, State.END);
                         break;

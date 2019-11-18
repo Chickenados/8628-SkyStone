@@ -2,6 +2,9 @@ package chickenados.tilerunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import chickenlib.CknTaskManager;
+import chickenlib.util.CknUtil;
 
 import chickenados.tilerunner.TileRunner;
 
