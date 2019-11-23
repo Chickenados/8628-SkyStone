@@ -32,7 +32,9 @@ public class VuforiaTest extends LinearOpMode {
 
             pose = robot.getSkystonePose();
 
-            robot.dashboard.setLine(1, "X: " + pose.x + " Y: " + pose.y);
+            if(pose != null) {
+                robot.dashboard.setLine(1, "X: " + pose.x + " Y: " + pose.y);
+            }
 
 
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
