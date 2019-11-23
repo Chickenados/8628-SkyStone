@@ -1,4 +1,10 @@
 package chickenlib.sensor;
 
-public class CknGyro {
+public abstract class CknGyro {
+
+    public abstract double getXHeading();
+
+    public abstract double getYHeading();
+
+    public abstract double getZHeading();
 }

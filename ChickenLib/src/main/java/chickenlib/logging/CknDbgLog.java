@@ -25,8 +25,6 @@ package chickenlib.logging;
 
 import android.util.Log;
 
-import chickenlib.CknDbgTrace;
-
 /**
  * This class implements the platform dependent debug logging.
  */

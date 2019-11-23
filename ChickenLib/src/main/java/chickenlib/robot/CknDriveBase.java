@@ -153,7 +153,7 @@ public abstract class CknDriveBase {
             //If we have a gyro, use it to set heading values for the pose.
             //This is much more accurate than dead reckoning.
             if(gyro != null){
-                //TODO: Implement gyro control.
+                odometry.heading = gyro.getZHeading();
             }
 
             // Transform delta x and delta y to a vector to calculate the actual change in x and y with heading.
