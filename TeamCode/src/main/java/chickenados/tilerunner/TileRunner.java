@@ -32,8 +32,8 @@ public class TileRunner extends CknRobot {
         backLeft = hwMap.dcMotor.get(TileRunnerInfo.REAR_LEFT_NAME);
         backRight = hwMap.dcMotor.get(TileRunnerInfo.REAR_RIGHT_NAME);
 
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         CknDriveBase.Parameters params = new CknDriveBase.Parameters();
         params.driveTypes.add(CknDriveBase.DriveType.TANK);
