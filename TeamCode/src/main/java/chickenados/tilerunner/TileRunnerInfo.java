@@ -24,6 +24,23 @@ public class TileRunnerInfo {
     public static final double FULL_SPEED = 1.0;
     public static final double PRECISION_SPEED = 0.3;
 
+    //Grabber arm subsystem
+    public static final String GRABBER_ARM_MOTOR_NAME = "grabberArm";
+    public static final double GRABBER_ARM_MOTOR_SPEED = 0.5;
+
+    public static final double GRABBER_PID_P = 0.007;
+    public static final double GRABBER_PID_I = 0.0;
+    public static final double GRABBER_PID_D = 0.0;
+
+    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -2325;
+    //gamepad1 left bumper, parallel to ground position
+    public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
+    //gamepad1 right bumper, all the way back
+    public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = -1000;
+    //gamepad1 right trigger
+    public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = -1600;
+    //gamepad1 left trigger under alliance bridge/dropping position
+
     //TODO: Update these values
     public static final double WHEEL_DIAMETER_INCHES = 4;
     public static final int ENCODER_TICKS_PER_REV = 520;

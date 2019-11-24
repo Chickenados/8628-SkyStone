@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import chickenlib.opmode.CknRobot;
-
+import chickenlib.inputstreams.CknEncoderInputStream;
+import chickenlib.CknPIDController;
 import chickenlib.CknDriveBase;
 import chickenlib.display.CknSmartDashboard;
 import chickenlib.location.CknLocationTracker;
@@ -18,6 +19,10 @@ public class TileRunner extends CknRobot {
     DcMotor frontRight;
     DcMotor backLeft;
     DcMotor backRight;
+    //Grabber subsystem
+    DcMotor grabberArmMotor;
+    TileRunnerGrabberArm grabberArm;
+    CknPIDController grabberPid;
 
     //Drivetrain subsystem
     public CknDriveBase driveBase;
@@ -45,6 +50,19 @@ public class TileRunner extends CknRobot {
         driveBase = new CknDriveBase(frontLeft, frontRight, backLeft, backRight, params);
         driveBase.setMode(CknDriveBase.DriveType.MECANUM);
         driveBase.setPositionScale(TileRunnerInfo.X_ENCODER_SCALE, TileRunnerInfo.Y_ENCODER_SCALE);
+
+        CknPIDController.Parameters grabberParams = new CknPIDController.Parameters();
+        grabberParams.allowOscillation = false;
+        grabberParams.useWraparound = false;
+
+        grabberArmMotor = hwMap.dcMotor.get(TileRunnerInfo.GRABBER_ARM_MOTOR_NAME);
+        grabberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        grabberArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        grabberArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        grabberPid = new CknPIDController(new CknPIDController.PIDCoefficients(TileRunnerInfo.GRABBER_PID_P, TileRunnerInfo.GRABBER_PID_I, TileRunnerInfo.GRABBER_PID_D),
+                new CknEncoderInputStream(grabberArmMotor), grabberParams);
+        grabberArm = new TileRunnerGrabberArm(grabberArmMotor, grabberPid);
 
     }
 }
