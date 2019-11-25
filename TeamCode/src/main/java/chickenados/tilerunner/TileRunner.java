@@ -30,8 +30,17 @@ public class TileRunner extends CknRobot {
     TileRunnerGrabberArm grabberArm;
     CknPIDController grabberPid;
 
+
     //Stone grabber servo
     Servo stoneGrabber;
+
+    //Foundation Grabber subsystem
+    DcMotor foundationGrabberMotor;
+    TileRunnerGrabberArm foundationGrabber;
+    CknPIDController foundationPid;
+
+
+
     //Drivetrain subsystem
     public CknDriveBase driveBase;
     public CknPIDDrive pidDrive;
@@ -76,6 +85,21 @@ public class TileRunner extends CknRobot {
         driveBase = new CknDriveBase(frontLeft, frontRight, backLeft, backRight, params);
         driveBase.setMode(CknDriveBase.DriveType.MECANUM);
         driveBase.setPositionScale(TileRunnerInfo.X_ENCODER_SCALE, TileRunnerInfo.Y_ENCODER_SCALE);
+
+
+        CknPIDController.Parameters foundationParams = new CknPIDController.Parameters();
+        foundationParams.allowOscillation = false;
+        foundationParams.useWraparound = false;
+
+        foundationGrabberMotor = hwMap.dcMotor.get(TileRunnerInfo.FOUNDATION_MOTOR_NAME);
+        foundationGrabberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        foundationGrabberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        foundationPid = new CknPIDController(new CknPIDController.PIDCoefficients(TileRunnerInfo.FOUNDATION_GRABBER_P, TileRunnerInfo.FOUNDATION_GRABBER_I, TileRunnerInfo.FOUNDATION_GRABBER_D),
+                new CknEncoderInputStream(foundationGrabberMotor), foundationParams);
+
+        foundationGrabber = new TileRunnerGrabberArm(foundationGrabberMotor, foundationPid);
+
 
         CknPIDController.Parameters grabberParams = new CknPIDController.Parameters();
         grabberParams.allowOscillation = false;

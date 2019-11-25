@@ -24,9 +24,24 @@ public class TileRunnerInfo {
     public static final double FULL_SPEED = 1.0;
     public static final double PRECISION_SPEED = 0.3;
 
+
     //Grabber servo
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
+
+    //
+    // Foundation Hook Subsystem
+    //
+    public static final String FOUNDATION_MOTOR_NAME = "foundation";
+    public static final double FOUNDATION_MOTOR_SPEED = 0.5;
+
+    public static final double FOUNDATION_GRABBER_P = 0.007;
+    public static final double FOUNDATION_GRABBER_I = 0.0;
+    public static final double FOUNDATION_GRABBER_D = 0.0;
+
+    //
+
     //Grabber arm subsystem
+    //
     public static final String GRABBER_ARM_MOTOR_NAME = "grabberArm";
     public static final double GRABBER_ARM_MOTOR_SPEED = 0.5;
 
