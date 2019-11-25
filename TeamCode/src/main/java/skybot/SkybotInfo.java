@@ -46,18 +46,21 @@ public class SkybotInfo {
     public static final double Y_ENCODER_PID_P = 0.05;
     public static final double Y_ENCODER_PID_I = 0.0;
     public static final double Y_ENCODER_PID_D = 0.0;
+    public static final double Y_ENCODER_PID_TOLERANCE = 0.0;
     public static final double Y_ENCODER_SCALE = .0112199738;
 
     // X PID values. This is sideways movement
     public static final double X_ENCODER_PID_P = 0.1;
     public static final double X_ENCODER_PID_I = 0.0;
     public static final double X_ENCODER_PID_D = 0.0;
+    public static final double X_ENCODER_PID_TOLERANCE = 0.0;
     public static final double X_ENCODER_SCALE = 1.0;
 
     // Turn PID values
     public static final double TURN_PID_P = 0.025;
     public static final double TURN_PID_I = 0.0;
     public static final double TURN_PID_D = 0.0;
+    public static final double TURN_PID_TOLERANCE = 0.0;
 
     // Adafruit BNO055 IMU
     public static final String IMU_NAME = "imu";
