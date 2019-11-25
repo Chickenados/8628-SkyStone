@@ -22,10 +22,10 @@ public class TileRunnerTeleop extends LinearOpMode {
 
         while(opModeIsActive()){
 
-            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x);
+            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
 
             //Precision speed
-            if (gamepad1.x){
+            if (gamepad2.x){
                 robot.driveBase.setSpeed(TileRunnerInfo.PRECISION_SPEED);
             } else robot.driveBase.setSpeed(TileRunnerInfo.FULL_SPEED);
 
