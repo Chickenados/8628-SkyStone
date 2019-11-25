@@ -12,6 +12,10 @@ public class TestMovement extends CknOpMode {
 
     CknRobot robot;
 
+    public void initPeriodic(){
+        super.initPeriodic();
+    }
+
     public void initRobot(){
         robot = new Tilerunner(hardwareMap, telemetry, false);
     }
