@@ -36,7 +36,7 @@ public class TileRunner extends CknRobot {
 
     //Foundation Grabber subsystem
     DcMotor foundationGrabberMotor;
-    TileRunnerGrabberArm foundationGrabber;
+    TileRunnerFoundationGrabber foundationGrabber;
     CknPIDController foundationPid;
 
 
@@ -98,7 +98,7 @@ public class TileRunner extends CknRobot {
         foundationPid = new CknPIDController(new CknPIDController.PIDCoefficients(TileRunnerInfo.FOUNDATION_GRABBER_P, TileRunnerInfo.FOUNDATION_GRABBER_I, TileRunnerInfo.FOUNDATION_GRABBER_D),
                 new CknEncoderInputStream(foundationGrabberMotor), foundationParams);
 
-        foundationGrabber = new TileRunnerGrabberArm(foundationGrabberMotor, foundationPid);
+        foundationGrabber = new TileRunnerFoundationGrabber(foundationGrabberMotor, foundationPid);
 
 
         CknPIDController.Parameters grabberParams = new CknPIDController.Parameters();
