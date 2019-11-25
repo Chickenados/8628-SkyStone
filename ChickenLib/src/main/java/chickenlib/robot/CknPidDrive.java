@@ -139,8 +139,6 @@ public class CknPidDrive {
         boolean turnOnTarget = turnPid == null || turnPid.isOnTarget();
         boolean onTarget = (xOnTarget && yOnTarget && turnOnTarget);
 
-        CknPose2D odometry = driveBase.getRobotPose();
-
         // Stop the PID movement if we are stalled, expired, or on target.
         if(stalled || expired || onTarget){
             stopPids();

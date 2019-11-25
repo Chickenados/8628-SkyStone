@@ -94,6 +94,8 @@ public class Skybot extends CknRobot {
                 new CknPidController.PidCoefficients(SkybotInfo.TURN_PID_P, SkybotInfo.TURN_PID_I, SkybotInfo.TURN_PID_D),
                 SkybotInfo.X_ENCODER_PID_TOLERANCE, driveBase::getHeading);
 
+        pidDrive = new CknPidDrive(driveBase, xPid, yPid, turnPid);
+        pidDrive.setStallTimeout(1.0);
 
     }
 
