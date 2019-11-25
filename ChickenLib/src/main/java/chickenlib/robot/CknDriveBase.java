@@ -80,6 +80,16 @@ public abstract class CknDriveBase {
         return motors.length;
     }
 
+    /*
+    * Tank Drive Methods
+     */
+
+    public abstract void tankDrive(double leftPower, double rightPower);
+
+    /*
+    * Holonomic Drive Methods
+     */
+
     public abstract boolean supportsHolonomicDrive();
 
     protected void holonomicDrive(double x, double y, double rotation, boolean inverted, double gyroAngle)
@@ -87,6 +97,9 @@ public abstract class CknDriveBase {
         throw new UnsupportedOperationException("Holonomic drive is not supported by this drive base!");
     }   //holonomicDrive
 
+    protected void holonomicDrive(double x, double y, double rotation){
+        holonomicDrive(x, y, rotation, false, 0.0);
+    }
 
     /**
      * Enables/Disables the odometry task.
@@ -111,11 +124,101 @@ public abstract class CknDriveBase {
         }
     }
 
-    private void resetOdometry(){
+    public CknPose2D getRobotPose(){
+        return odometry;
+    }
 
+    public double getXPosition(){
+        return odometry.x;
+    }
+
+    public double getYPosition(){
+        return odometry.y;
+    }
+
+    public double getHeading(){
+        return odometry.heading;
+    }
+
+    /**
+     * Reset Robot's odometry
+     */
+    private void resetOdometry(){
+        odometry.x = 0.0;
+        odometry.y = 0.0;
+        odometry.heading = 0.0;
+    }
+
+    /**
+     * Hardware reset of motor encoders.
+     * This should only be done in init() as this can take some time.
+     */
+    public void resetMotorOdometry(){
+        for (DcMotor motor : motors) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+        for (DcMotor motor : motors) {
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
     }
 
     protected abstract CknPose2D getPoseDelta(MotorsState motorsState);
+
+    /**
+     * Return true if a motor is stalled.
+     * Stalled motors are motors that are receiving power but aren't moving.
+     * @param motor
+     * @param stallTimeout
+     * @return
+     */
+    public boolean isMotorStalled(int motor, double stallTimeout){
+        double currTime = CknUtil.getCurrentTime();
+        boolean stalled = false;
+
+        synchronized (odometry){
+            stalled =  currTime - motorsState.stallStartTimes[motor] > stallTimeout;
+        }
+
+        return stalled;
+    }
+
+    public boolean isStalled(double stallTimeout){
+        boolean stalled = true;
+
+        synchronized (odometry){
+            for(int i = 0; i<motorsState.stallStartTimes.length; i++){
+                if(!isMotorStalled(i, stallTimeout)){
+                    stalled = false;
+                    break;
+                }
+            }
+        }
+
+        return stalled;
+    }
+
+    /**
+     * Reset the timers for checking if a motor is stalled.
+     */
+    public void resetStallTimer(){
+        synchronized (odometry){
+            for(int i = 0; i<motorsState.stallStartTimes.length; i++){
+                motorsState.stallStartTimes[i] = CknUtil.getCurrentTime();
+            }
+        }
+    }
+
+    /**
+     * Stop the drive train.
+     */
+    public void stop(){
+
+        for( DcMotor motor : motors){
+            motor.setPower(0.0);
+        }
+
+    }
 
     /**
      * The main task method that tracks the location of the robot on the field.
@@ -176,7 +279,7 @@ public abstract class CknDriveBase {
      * @param runMode
      */
     private void stopTask(CknTaskMgr.TaskType taskType, CknRobot.RunMode runMode){
-        //TODO: Stop the drivebase
+        stop();
     }
     
 }
