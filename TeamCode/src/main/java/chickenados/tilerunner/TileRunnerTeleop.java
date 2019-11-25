@@ -16,7 +16,7 @@ public class TileRunnerTeleop extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        robot = new TileRunner(hardwareMap);
+        robot = new TileRunner(hardwareMap, telemetry, false);
 
         waitForStart();
 
@@ -24,6 +24,16 @@ public class TileRunnerTeleop extends LinearOpMode {
 
             robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x);
 
+            //Precision speed
+            if (gamepad1.x){
+                robot.driveBase.setSpeed(TileRunnerInfo.PRECISION_SPEED);
+            } else robot.driveBase.setSpeed(TileRunnerInfo.FULL_SPEED);
+
+            if(gamepad1.a){
+                robot.stoneGrabber.setPosition(0);
+            } else if(gamepad1.b){
+                robot.stoneGrabber.setPosition(97);
+            }
             //Grabber Arm Control
             if(gamepad1.right_bumper){
                 robot.grabberArm.retract(null,2.0);

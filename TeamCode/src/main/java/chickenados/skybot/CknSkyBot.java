@@ -87,7 +87,7 @@ public class CknSkyBot extends CknRobot {
         imu = new CknBNO055IMU(hwMap,"imu", aParameters);
 
 
-        //
+
         // Initialize Drive Train system
         //
 

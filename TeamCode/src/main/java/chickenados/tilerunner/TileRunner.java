@@ -3,17 +3,23 @@ package chickenados.tilerunner;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import chickenlib.CknPIDDrive;
 import chickenlib.opmode.CknRobot;
 import chickenlib.inputstreams.CknEncoderInputStream;
 import chickenlib.CknPIDController;
 import chickenlib.CknDriveBase;
 import chickenlib.display.CknSmartDashboard;
 import chickenlib.location.CknLocationTracker;
+import chickenlib.sensor.CknAccelerometer;
+import chickenlib.sensor.CknBNO055IMU;
 
 
 public class TileRunner extends CknRobot {
-
+    HardwareMap hwMap;
+    boolean useVuforia;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -24,14 +30,34 @@ public class TileRunner extends CknRobot {
     TileRunnerGrabberArm grabberArm;
     CknPIDController grabberPid;
 
+    //Stone grabber servo
+    Servo stoneGrabber;
     //Drivetrain subsystem
     public CknDriveBase driveBase;
+    public CknPIDDrive pidDrive;
     public CknLocationTracker locationTracker;
+    public CknPIDController yPid;
+    public CknPIDController turnPid;
+
+    CknBNO055IMU imu;
 
     public CknSmartDashboard dashboard;
 
-    public TileRunner(HardwareMap hwMap) {
+    public TileRunner(HardwareMap hwMap, Telemetry telemetry){
+        this(hwMap, telemetry, false);
+    }
 
+    public TileRunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia){
+
+        this.hwMap = hwMap;
+
+        this.useVuforia = useVuforia;
+        CknAccelerometer.Parameters aParameters = new CknAccelerometer.Parameters();
+        aParameters.doIntegration = true;
+
+        imu = new CknBNO055IMU(hwMap,"imu", aParameters);
+
+        //Drive Train
         frontLeft = hwMap.dcMotor.get(TileRunnerInfo.FRONT_LEFT_NAME);
         frontRight = hwMap.dcMotor.get(TileRunnerInfo.FRONT_RIGHT_NAME);
         backLeft = hwMap.dcMotor.get(TileRunnerInfo.REAR_LEFT_NAME);
