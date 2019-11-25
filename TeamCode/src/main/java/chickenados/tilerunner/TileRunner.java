@@ -66,6 +66,7 @@ public class TileRunner extends CknRobot {
 
         imu = new CknBNO055IMU(hwMap,"imu", aParameters);
 
+        stoneGrabber = hwMap.servo.get(TileRunnerInfo.STONE_GRABBER_NAME);
         //Drive Train
         frontLeft = hwMap.dcMotor.get(TileRunnerInfo.FRONT_LEFT_NAME);
         frontRight = hwMap.dcMotor.get(TileRunnerInfo.FRONT_RIGHT_NAME);
