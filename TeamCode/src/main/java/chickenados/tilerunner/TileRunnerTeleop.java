@@ -59,6 +59,8 @@ public class TileRunnerTeleop extends LinearOpMode {
                 robot.grabberArm.manualControl(-0.5);
             } else if(gamepad1.dpad_up){
                 robot.grabberArm.manualControl(0.5);
+            } else {
+
             }
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
         }

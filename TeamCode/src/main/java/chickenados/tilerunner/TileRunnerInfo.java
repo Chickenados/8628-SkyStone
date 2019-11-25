@@ -49,13 +49,13 @@ public class TileRunnerInfo {
     public static final double GRABBER_PID_I = 0.0;
     public static final double GRABBER_PID_D = 0.0;
 
-    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -2325;
+    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -50;
     //gamepad1 left bumper, parallel to ground position
     public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
     //gamepad1 right bumper, all the way back
-    public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = -1000;
+    public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = -25;
     //gamepad1 right trigger
-    public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = -1600;
+    public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = -10;
     //gamepad1 left trigger under alliance bridge/dropping position
 
     //TODO: Update these values

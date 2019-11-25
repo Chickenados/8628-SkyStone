@@ -109,7 +109,7 @@ public class TileRunner extends CknRobot {
         grabberArmMotor = hwMap.dcMotor.get(TileRunnerInfo.GRABBER_ARM_MOTOR_NAME);
         grabberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabberArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        grabberArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //grabberArmMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         grabberPid = new CknPIDController(new CknPIDController.PIDCoefficients(TileRunnerInfo.GRABBER_PID_P, TileRunnerInfo.GRABBER_PID_I, TileRunnerInfo.GRABBER_PID_D),
                 new CknEncoderInputStream(grabberArmMotor), grabberParams);
