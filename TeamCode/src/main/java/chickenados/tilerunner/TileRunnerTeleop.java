@@ -46,9 +46,9 @@ public class TileRunnerTeleop extends LinearOpMode {
             }
 
             //Foundation Grabber
-            if(gamepad1.a){
+            if(gamepad1.x){
                 robot.foundationGrabber.goToPosition(50, null, 1.0);
-            } else if(gamepad1.b){
+            } else if(gamepad1.y){
                 robot.foundationGrabber.goToPosition(1000, null, 1.0);
             }
 
