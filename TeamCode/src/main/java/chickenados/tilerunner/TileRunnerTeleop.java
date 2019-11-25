@@ -12,6 +12,7 @@ import chickenados.tilerunner.TileRunner;
 public class TileRunnerTeleop extends LinearOpMode {
 
     TileRunner robot;
+    CknTaskManager mgr = new CknTaskManager();
 
     @Override
     public void runOpMode(){
@@ -22,7 +23,13 @@ public class TileRunnerTeleop extends LinearOpMode {
 
         while(opModeIsActive()){
 
+
             robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
+
+            CknUtil.CknLoopCounter.getInstance().loop++;
+            CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
+            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x);
+
 
             //Precision speed
             if (gamepad2.x){
@@ -46,9 +53,9 @@ public class TileRunnerTeleop extends LinearOpMode {
             }
 
             //Foundation Grabber
-            if(gamepad1.a){
+            if(gamepad1.x){
                 robot.foundationGrabber.goToPosition(50, null, 1.0);
-            } else if(gamepad1.b){
+            } else if(gamepad1.y){
                 robot.foundationGrabber.goToPosition(1000, null, 1.0);
             }
 
@@ -58,6 +65,7 @@ public class TileRunnerTeleop extends LinearOpMode {
             } else if(gamepad1.dpad_up){
                 robot.grabberArm.manualControl(0.5);
             }
+            CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
         }
 
     }
