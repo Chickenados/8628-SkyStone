@@ -18,6 +18,8 @@ public class TileRunnerGrabberArm implements CknTaskManager.Task {
         double timeout;
         CknEvent event;
 
+        boolean enabled = false;
+
 
         public TileRunnerGrabberArm(DcMotor armMotor, CknPIDController pid){
                 this.armMotor = armMotor;
@@ -53,8 +55,8 @@ public class TileRunnerGrabberArm implements CknTaskManager.Task {
 
         //Manually move arm with controller to calibrate zero position
         public void manualControl(double motorPower){
-        setTaskEnabled(false);
-        armMotor.setPower(motorPower);
+                setTaskEnabled(false);
+                armMotor.setPower(motorPower);
         }
 
         //Set zero position
@@ -74,11 +76,17 @@ public class TileRunnerGrabberArm implements CknTaskManager.Task {
         }
 
         public void setTaskEnabled(boolean enabled){
+                this.enabled = enabled;
+
                 if(enabled){
                 CknTaskManager.getInstance().registerTask(this, CknTaskManager.TaskType.POSTCONTINUOUS);
                 } else {
                 CknTaskManager.getInstance().unregisterTask(this, CknTaskManager.TaskType.POSTCONTINUOUS);
                 }
+        }
+
+        public boolean taskEnabled(){
+                return enabled;
         }
 
 @Override
@@ -94,7 +102,7 @@ public void postContinuous(){
 
         armMotor.setPower(Range.clip(motorPower, -TileRunnerInfo.GRABBER_ARM_MOTOR_SPEED, TileRunnerInfo.GRABBER_ARM_MOTOR_SPEED));
         if(grabberPID.onTarget() || CknUtil.getCurrentTime() > startTime + timeout){
-        stop();
+                stop();
         }
 
         }

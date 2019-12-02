@@ -39,9 +39,11 @@ public class TileRunnerTeleop extends LinearOpMode {
             if(gamepad1.a){
                 robot.stoneGrabber.setPosition(0);
             } else if(gamepad1.b){
-                robot.stoneGrabber.setPosition(97);
+                robot.stoneGrabber.setPosition(100);
             }
+
             //Grabber Arm Control
+
             if(gamepad1.right_bumper){
                 robot.grabberArm.retract(null,2.0);
             } else if (gamepad1.left_bumper){
@@ -59,14 +61,18 @@ public class TileRunnerTeleop extends LinearOpMode {
                 robot.foundationGrabber.goToPosition(1000, null, 1.0);
             }
 
-            //Manual Calibration
-            if(gamepad1.dpad_down){
-                robot.grabberArm.manualControl(-0.5);
-            } else if(gamepad1.dpad_up){
-                robot.grabberArm.manualControl(0.5);
-            } else {
 
+            //Manual Calibration
+            if(!robot.grabberArm.enabled) {
+                if (gamepad1.dpad_down) {
+                    robot.grabberArm.manualControl(-0.5);
+                } else if (gamepad1.dpad_up) {
+                    robot.grabberArm.manualControl(0.5);
+                } else {
+                    robot.grabberArm.manualControl(0);
+                }
             }
+
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
         }
 
