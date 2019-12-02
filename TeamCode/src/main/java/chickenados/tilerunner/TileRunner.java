@@ -6,7 +6,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
+import chickenados.skybot.CknSkyBotInfo;
+import chickenados.skybot.VuforiaVision;
 import chickenlib.CknPIDDrive;
+import chickenlib.location.CknPose;
 import chickenlib.opmode.CknRobot;
 import chickenlib.inputstreams.CknEncoderInputStream;
 import chickenlib.CknPIDController;
@@ -15,11 +24,22 @@ import chickenlib.display.CknSmartDashboard;
 import chickenlib.location.CknLocationTracker;
 import chickenlib.sensor.CknAccelerometer;
 import chickenlib.sensor.CknBNO055IMU;
+import chickenlib.vision.CknVuforia;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 
 public class TileRunner extends CknRobot {
     HardwareMap hwMap;
     boolean useVuforia;
+
+    //Vuforia Targets
+    CknVuforia vuforia;
+    CameraName webcameName;
+    VuforiaVision vuforiaVision;
 
     DcMotor frontLeft;
     DcMotor frontRight;
@@ -139,5 +159,58 @@ public class TileRunner extends CknRobot {
                 new CknEncoderInputStream(grabberArmMotor), grabberParams);
         grabberArm = new TileRunnerGrabberArm(grabberArmMotor, grabberPid);
 
+        // Initialize Vuforia
+        if(useVuforia){
+            initVuforia();
+        }
+    }
+
+    private void initVuforia(){
+
+        float phoneXRotate;
+        float phoneYRotate;
+        float phoneZRotate = 0.0f;
+
+        webcameName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
+        // Set this int to -1 if you want to disable the camera monitor.
+        int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
+                "id", hwMap.appContext.getPackageName());
+
+        vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName, BACK);
+
+        // We need to rotate the camera around it's long axis to bring the correct camera forward.
+        phoneYRotate = CknSkyBotInfo.CAMERA_CHOICE == BACK ? -90.0f : 90.0f;
+
+        // Rotate the phone vertical about the X axis if it's in portrait mode
+        phoneXRotate = CknSkyBotInfo.CAMERA_IS_PORTRAIT ? 90.0f : 0.0f;
+
+        final int CAMERA_FORWARD_DISPLACEMENT = (int)((CknSkyBotInfo.ROBOT_LENGTH/2.0 - CknSkyBotInfo.CAMERA_FRONT_OFFSET)* CknSkyBotInfo.mmPerInch);
+        final int CAMERA_VERTICAL_DISPLACEMENT = (int)(CknSkyBotInfo.CAMERA_HEIGHT_OFFSET*CknSkyBotInfo.mmPerInch);
+        final int CAMERA_LEFT_DISPLACEMENT = (int)((CknSkyBotInfo.ROBOT_WIDTH/2.0 - CknSkyBotInfo.CAMERA_LEFT_OFFSET)*CknSkyBotInfo.mmPerInch);
+
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
+                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
+                        phoneYRotate, phoneZRotate, phoneXRotate));
+
+        vuforiaVision = new VuforiaVision(vuforia, robotFromCamera);
+    }
+
+    public CknPose getSkystonePose(){
+        CknPose pose = null;
+
+        if(vuforiaVision != null){
+            OpenGLMatrix robotLocation = vuforiaVision.getRobotLocation();
+            if (robotLocation != null)
+            {
+                VectorF translation = vuforiaVision.getLocationTranslation(robotLocation);
+                Orientation orientation = vuforiaVision.getLocationOrientation(robotLocation);
+                pose = new CknPose(
+                        translation.get(1)/ CknSkyBotInfo.mmPerInch, -translation.get(0)/CknSkyBotInfo.mmPerInch,
+                        orientation.thirdAngle);
+            }
+        }
+
+        return pose;
     }
 }
