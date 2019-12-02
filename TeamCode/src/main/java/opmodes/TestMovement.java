@@ -28,6 +28,7 @@ public class TestMovement extends CknOpMode {
         super.initPeriodic();
     }
 
+    @Override
     public void initRobot(){
         robot = new Tilerunner(hardwareMap, telemetry, false);
         event = new CknEvent(moduleName);
@@ -35,7 +36,8 @@ public class TestMovement extends CknOpMode {
         sm.start(State.DRIVE);
     }
 
-    public void runContinuous(){
+    @Override
+    public void runContinuous(double elapsedTime){
         State state = sm.checkReadyAndGetState();
 
         if(state == null){
@@ -55,6 +57,16 @@ public class TestMovement extends CknOpMode {
             }
 
         }
+    }
+
+    @Override
+    public void startMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
+
+    }
+
+    @Override
+    public void stopMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
+        
     }
 
 }
