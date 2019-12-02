@@ -59,15 +59,28 @@ public class TileRunner extends CknRobot {
     public TileRunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia){
 
         this.hwMap = hwMap;
-
         this.useVuforia = useVuforia;
+
+        //
+        // Initialize Dashboard system
+        //
+        CknSmartDashboard.Parameters dashParams = new CknSmartDashboard.Parameters();
+        dashParams.displayWidth = 400;
+        dashParams.numLines = 32;
+        dashboard = CknSmartDashboard.createInstance(telemetry, dashParams);
+
+        //
+        // IMU
+        //
         CknAccelerometer.Parameters aParameters = new CknAccelerometer.Parameters();
         aParameters.doIntegration = true;
 
         imu = new CknBNO055IMU(hwMap,"imu", aParameters);
 
-        stoneGrabber = hwMap.servo.get(TileRunnerInfo.STONE_GRABBER_NAME);
-        //Drive Train
+        //
+        // Drive Train
+        //
+
         frontLeft = hwMap.dcMotor.get(TileRunnerInfo.FRONT_LEFT_NAME);
         frontRight = hwMap.dcMotor.get(TileRunnerInfo.FRONT_RIGHT_NAME);
         backLeft = hwMap.dcMotor.get(TileRunnerInfo.REAR_LEFT_NAME);
@@ -87,6 +100,9 @@ public class TileRunner extends CknRobot {
         driveBase.setMode(CknDriveBase.DriveType.MECANUM);
         driveBase.setPositionScale(TileRunnerInfo.X_ENCODER_SCALE, TileRunnerInfo.Y_ENCODER_SCALE);
 
+        //
+        // Foundation Grabber
+        //
 
         CknPIDController.Parameters foundationParams = new CknPIDController.Parameters();
         foundationParams.allowOscillation = false;
@@ -101,11 +117,19 @@ public class TileRunner extends CknRobot {
 
         foundationGrabber = new TileRunnerFoundationGrabber(foundationGrabberMotor, foundationPid);
 
+        //
+        // Stone Grabber Arm
+        //
 
+        // Servo at end of arm
+        stoneGrabber = hwMap.servo.get(TileRunnerInfo.STONE_GRABBER_NAME);
+
+        // DC Motor PID for arm
         CknPIDController.Parameters grabberParams = new CknPIDController.Parameters();
         grabberParams.allowOscillation = false;
         grabberParams.useWraparound = false;
 
+        // Dc Motor for arm
         grabberArmMotor = hwMap.dcMotor.get(TileRunnerInfo.GRABBER_ARM_MOTOR_NAME);
         grabberArmMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabberArmMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
