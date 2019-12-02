@@ -101,6 +101,12 @@ public abstract class CknDriveBase {
         holonomicDrive(x, y, rotation, false, 0.0);
     }
 
+    public void setDriveScale(double xScale, double yScale, double rotScale){
+        this.xScale = xScale;
+        this.yScale = yScale;
+        this.rotScale = rotScale;
+    }
+
     /**
      * Enables/Disables the odometry task.
      * @param enabled

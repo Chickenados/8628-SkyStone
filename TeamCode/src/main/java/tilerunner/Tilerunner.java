@@ -77,6 +77,7 @@ public class Tilerunner extends CknRobot {
 
         //Initialize Drive Base
         driveBase = new CknMecanumDriveBase(frontLeft, frontRight, rearLeft, rearRight, imu);
+        driveBase.setDriveScale(TilerunnerInfo.X_ENCODER_SCALE, TilerunnerInfo.Y_ENCODER_SCALE, TilerunnerInfo.TURN_PID_SCALE);
 
         //
         // PID Subsystems
@@ -88,11 +89,11 @@ public class Tilerunner extends CknRobot {
 
         yPid = new CknPidController("skybotYPid",
                 new CknPidController.PidCoefficients(TilerunnerInfo.Y_ENCODER_PID_P, TilerunnerInfo.Y_ENCODER_PID_I, TilerunnerInfo.Y_ENCODER_PID_D),
-                TilerunnerInfo.X_ENCODER_PID_TOLERANCE, driveBase::getYPosition);
+                TilerunnerInfo.Y_ENCODER_PID_TOLERANCE, driveBase::getYPosition);
 
         turnPid = new CknPidController("skybotYPid",
                 new CknPidController.PidCoefficients(TilerunnerInfo.TURN_PID_P, TilerunnerInfo.TURN_PID_I, TilerunnerInfo.TURN_PID_D),
-                TilerunnerInfo.X_ENCODER_PID_TOLERANCE, driveBase::getHeading);
+                TilerunnerInfo.TURN_PID_TOLERANCE, driveBase::getHeading);
 
         pidDrive = new CknPidDrive(driveBase, xPid, yPid, turnPid);
         pidDrive.setStallTimeout(1.0);
