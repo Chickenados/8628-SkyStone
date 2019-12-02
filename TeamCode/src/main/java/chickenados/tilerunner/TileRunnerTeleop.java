@@ -22,10 +22,6 @@ public class TileRunnerTeleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-
-
-            robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
-
             CknUtil.CknLoopCounter.getInstance().loop++;
             CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
             robot.driveBase.mecanumDrive(gamepad1.right_stick_y, -gamepad1.right_stick_x, -gamepad1.left_stick_x);
