@@ -18,8 +18,8 @@ public class TilerunnerInfo {
     // Grabber Subsystem
     //
     public static final String STONE_GRABBER_NAME = "stoneGrabber";
-    public static final String FRONT_FOUNDATION_NAME = "frontFoundation";
-    public static final String SIDE_FOUNDATION_NAME = "sideFoundation";
+    public static final int STONE_GRABBER_OPEN_POS = 0;
+    public static final int STONE_GRABBER_CLOSED_POS = 105;
 
     public static final String GRABBER_ARM_MOTOR_NAME = "grabberArm";
     public static final double GRABBER_ARM_MOTOR_SPEED = 0.5;
@@ -27,18 +27,29 @@ public class TilerunnerInfo {
     public static final double GRABBER_PID_P = 0.007;
     public static final double GRABBER_PID_I = 0.0;
     public static final double GRABBER_PID_D = 0.0;
+    public static final double GRABBER_PID_TOLERANCE = 1.0;
 
-    public static final int GRABBER_EXTENDED_ENCODER_COUNT = -2325;
-    //gamepad1 left bumper, parallel to ground position
+    //Arm positions
+    public static final int GRABBER_EXTENDED_ENCODER_COUNT = 2250;
     public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
-    //gamepad1 right bumper, all the way back
-    public static final int GRABBER_HIGH_POSITION_ENCODER_COUNT = -1000;
-    //gamepad1 right trigger
-    public static final int GRABBER_LOW_POSITION_ENCODER_COUNT = -1600;
-    //gamepad1 left trigger under alliance bridge/dropping position
+    public static final int GRABBER_STRAIGHT_UP_ENCODER_COUNT = 1000;
+
+    //
+    // Foundation Grabber/hook subsystem
+    //
+    public static final String FOUNDATION_HOOK_MOTOR_NAME = "foundation";
+    public static final int FOUNDATION_HOOK_GRAB_POS = 800;
+    public static final int FOUNDATION_HOOK_RELEASE_POS = 50;
+
+    public static final double FOUND_PID_P = 0.0005;
+    public static final double FOUND_PID_I = 0.0;
+    public static final double FOUND_PID_D = 0.0;
+    public static final double FOUND_PID_TOLERANCE = 1.0;
 
 
+    //
     // Tele Op Variables
+    //
     public static final double FULL_SPEED = 1.0;
     public static final double PRECISION_SPEED = 0.3;
 

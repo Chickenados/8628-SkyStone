@@ -29,9 +29,12 @@ public abstract class CknDriveBase {
     private CknPose2D odometry;
     private CknPose2D poseDelta;
     protected double xScale, yScale, rotScale = 1.0;
+    private boolean odometryEnabled;
+    protected double speed = 1.0;
 
     private DcMotor[] motors;
     private CknGyro gyro;
+
 
     protected class MotorsState
     {
@@ -99,7 +102,7 @@ public abstract class CknDriveBase {
         throw new UnsupportedOperationException("Holonomic drive is not supported by this drive base!");
     }   //holonomicDrive
 
-    protected void holonomicDrive(double x, double y, double rotation){
+    public void holonomicDrive(double x, double y, double rotation){
         holonomicDrive(x, y, rotation, false, 0.0);
     }
 
@@ -107,6 +110,14 @@ public abstract class CknDriveBase {
         this.xScale = xScale;
         this.yScale = yScale;
         this.rotScale = rotScale;
+    }
+
+    /**
+     * Sets the max speed of the drivetrain
+     * @param speed
+     */
+    public void setSpeed(double speed){
+        this.speed = speed;
     }
 
     /**
@@ -127,9 +138,15 @@ public abstract class CknDriveBase {
             odometryTaskObj.unregisterTask(CknTaskMgr.TaskType.STANDALONE_TASK);
         }
 
+        odometryEnabled = enabled;
+
         if (debugEnabled) {
             dbgTrace.traceExit(funcName, CknDbgTrace.TraceLevel.API);
         }
+    }
+
+    public boolean isOdometryEnabled(){
+        return odometryEnabled;
     }
 
     public CknPose2D getRobotPose(){
@@ -151,7 +168,7 @@ public abstract class CknDriveBase {
     /**
      * Reset Robot's odometry
      */
-    private void resetOdometry(){
+    public void resetOdometry(){
         odometry.x = 0.0;
         odometry.y = 0.0;
         odometry.heading = 0.0;
@@ -249,6 +266,9 @@ public abstract class CknDriveBase {
                 //Get current position from encoder
                 motorsState.currPositions[i] = motors[i].getCurrentPosition();
 
+                //Record difference in position
+                motorsState.motorPosDiffs[i] = motorsState.currPositions[i] - motorsState.prevPositions[i];
+
                 //Stall protection
                 // A motor is deemed stalling if it's encoder position hasn't changed and the power is not zero.
                 if (motorsState.currPositions[i] != motorsState.prevPositions[i] || motors[i].getPower() == 0.0)
@@ -264,7 +284,7 @@ public abstract class CknDriveBase {
             //If we have a gyro, use it to set heading values for the pose.
             //This is much more accurate than dead reckoning.
             if(gyro != null){
-                odometry.heading = gyro.getZHeading();
+                poseDelta.heading = gyro.getZHeading() - odometry.heading;
             }
 
             // Transform delta x and delta y to a vector to calculate the actual change in x and y with heading.

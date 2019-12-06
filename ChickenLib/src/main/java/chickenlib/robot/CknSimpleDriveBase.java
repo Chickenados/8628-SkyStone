@@ -1,6 +1,7 @@
 package chickenlib.robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import chickenlib.logging.CknDbgTrace;
 import chickenlib.sensor.CknGyro;
@@ -41,19 +42,19 @@ public class CknSimpleDriveBase extends CknDriveBase {
 
         // Check if each motor exists, and set power.
         if(frontLeft != null){
-            frontLeft.setPower(leftPower);
+            frontLeft.setPower(Range.clip(leftPower * speed, -1, 1));
         }
 
         if(frontRight != null){
-            frontRight.setPower(rightPower);
+            frontRight.setPower(Range.clip(leftPower * speed, -1, 1));
         }
 
         if(backLeft != null){
-            backRight.setPower(leftPower);
+            backLeft.setPower(Range.clip(leftPower * speed, -1, 1));
         }
 
         if(backRight != null){
-            backRight.setPower(rightPower);
+            backRight.setPower(Range.clip(leftPower * speed, -1, 1));
         }
 
         if (debugEnabled)

@@ -1,6 +1,7 @@
 package chickenlib.robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import chickenlib.logging.CknDbgTrace;
 import chickenlib.sensor.CknGyro;
@@ -75,17 +76,17 @@ public class CknMecanumDriveBase extends CknSimpleDriveBase {
 
             double wheelPower;
 
-            wheelPower = wheelPowers[MotorType.FRONT_LEFT.value];
-            frontLeft.setPower(wheelPower);
+            wheelPower = wheelPowers[MotorType.FRONT_LEFT.value] * speed;
+            frontLeft.setPower(Range.clip(wheelPower, -1, 1));
 
-            wheelPower = wheelPowers[MotorType.FRONT_RIGHT.value];
-            frontRight.setPower(wheelPower);
+            wheelPower = wheelPowers[MotorType.FRONT_RIGHT.value] * speed;
+            frontRight.setPower(Range.clip(wheelPower, -1, 1));
 
-            wheelPower = wheelPowers[MotorType.BACK_LEFT.value];
-            backLeft.setPower(wheelPower);
+            wheelPower = wheelPowers[MotorType.BACK_LEFT.value] * speed;
+            backLeft.setPower(Range.clip(wheelPower, -1, 1));
 
-            wheelPower = wheelPowers[MotorType.BACK_RIGHT.value];
-            backRight.setPower(wheelPower);
+            wheelPower = wheelPowers[MotorType.BACK_RIGHT.value] * speed;
+            backRight.setPower(Range.clip(wheelPower, -1, 1));
 
 
         if (debugEnabled)

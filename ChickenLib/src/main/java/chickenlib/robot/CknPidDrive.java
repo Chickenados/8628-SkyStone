@@ -7,6 +7,7 @@ import chickenlib.pid.CknPidController;
 import chickenlib.util.CknEvent;
 import chickenlib.util.CknPose2D;
 import chickenlib.util.CknUtil;
+import chickenlib.util.CknWarpSpace;
 
 public class CknPidDrive {
 
@@ -24,6 +25,8 @@ public class CknPidDrive {
     private CknTaskMgr.TaskObject pidDriveTaskObj;
     private CknTaskMgr.TaskObject stopTaskObj;
 
+    private CknWarpSpace warpSpace;
+
     private double stallTimeout = 0.0;
     private double expiredTimeout = 0.0;
     private double startTime = CknUtil.getCurrentTime();
@@ -38,6 +41,10 @@ public class CknPidDrive {
 
         pidDriveTaskObj = CknTaskMgr.getInstance().createTask(moduleName + ".pidDriveTask", this::driveTask);
         stopTaskObj = CknTaskMgr.getInstance().createTask(moduleName + ".stopTask", this::stopTask);
+
+        if(turnPid != null){
+            warpSpace = new CknWarpSpace(moduleName, 0.0, 360.0);
+        }
     }
 
     public void setStallTimeout(double timeout){
@@ -61,7 +68,7 @@ public class CknPidDrive {
             yPid.setTarget(yTarget);
         }
         if(turnPid != null){
-            turnPid.setTarget(turnTarget);
+            turnPid.setTarget(turnTarget, warpSpace != null? warpSpace: null);
         }
 
         if(event != null){
@@ -142,7 +149,6 @@ public class CknPidDrive {
         // Stop the PID movement if we are stalled, expired, or on target.
         if(stalled || expired || onTarget){
             stopPids();
-            driveBase.stop();
 
             // Some autonomous programs use events to know when we are done driving.
             // If we have been given an event, set it to true.
@@ -152,10 +158,11 @@ public class CknPidDrive {
             }
 
         }
-
-        if(driveBase.supportsHolonomicDrive() && xPid != null){
+        // If we can use holonomic, use it.
+        else if(driveBase.supportsHolonomicDrive() && xPid != null){
             driveBase.holonomicDrive(xPower, yPower, turnPower);
         }
+        // Default to tank drive for non-holonomic drives.
         else
         {
             driveBase.tankDrive(yPower + turnPower, yPower - turnPower);
