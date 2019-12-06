@@ -22,7 +22,7 @@ public class Skybot extends CknRobot {
     //Vuforia Targets
     //CknVuforia vuforia;
     //CameraName webcameName;
-    //VuforiaVision vuforiaVision;
+    //tilerunner.VuforiaVision vuforiaVision;
 
     //Drivetrain subsystem
     public CknDriveBase driveBase;

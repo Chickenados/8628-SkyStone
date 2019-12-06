@@ -10,7 +10,7 @@ import chickenlib.util.CknStateMachine;
 import skybot.Skybot;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "PID Movement Test")
+@Autonomous(name = "PID Movement Test", group="FtcAuto")
 public class TestMovement extends CknOpMode {
 
     private final String moduleName = "TestMovement";
@@ -24,16 +24,18 @@ public class TestMovement extends CknOpMode {
     CknStateMachine<State> sm;
     CknEvent event;
 
-    public void initPeriodic(){
-        super.initPeriodic();
-    }
-
     @Override
     public void initRobot(){
         robot = new Tilerunner(hardwareMap, telemetry, false);
+
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
         sm.start(State.DRIVE);
+    }
+
+    @Override
+    public void initPeriodic(){
+        super.initPeriodic();
     }
 
     @Override
@@ -61,12 +63,12 @@ public class TestMovement extends CknOpMode {
 
     @Override
     public void startMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
-
+        robot.startMode(nextMode);
     }
 
     @Override
     public void stopMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
-        
+        robot.stopMode(prevMode);
     }
 
 }

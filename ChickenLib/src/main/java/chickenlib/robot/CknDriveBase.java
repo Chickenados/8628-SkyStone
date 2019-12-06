@@ -51,6 +51,8 @@ public abstract class CknDriveBase {
 
         this.motors = motors;
 
+        motorsState = new MotorsState();
+
         motorsState.currPositions = new double[motors.length];
         motorsState.prevPositions = new double[motors.length];
         motorsState.stallStartTimes = new double[motors.length];

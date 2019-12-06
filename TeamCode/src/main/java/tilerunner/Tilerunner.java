@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 
 import chickenlib.opmode.CknDashboard;
 import chickenlib.opmode.CknRobot;
@@ -12,6 +13,7 @@ import chickenlib.pid.CknPidController;
 import chickenlib.robot.CknDriveBase;
 import chickenlib.robot.CknMecanumDriveBase;
 import chickenlib.robot.CknPidDrive;
+import chickenlib.robot.CknVuforia;
 import chickenlib.sensor.CknBNO055IMU;
 
 public class Tilerunner extends CknRobot {
@@ -20,9 +22,9 @@ public class Tilerunner extends CknRobot {
     boolean useVuforia;
 
     //Vuforia Targets
-    //CknVuforia vuforia;
-    //CameraName webcameName;
-    //VuforiaVision vuforiaVision;
+    CknVuforia vuforia;
+    CameraName webcameName;
+    VuforiaVision vuforiaVision;
 
     //Drivetrain subsystem
     public CknDriveBase driveBase;
@@ -52,7 +54,7 @@ public class Tilerunner extends CknRobot {
         this.hwMap = hwMap;
 
         //Initialize Dashboard
-        dashboard = CknDashboard.createInstance(telemetry);
+        dashboard = CknDashboard.getInstance();
 
         //Set up the IMU
         imu = new CknBNO055IMU(hwMap, TilerunnerInfo.IMU_NAME);
@@ -97,6 +99,18 @@ public class Tilerunner extends CknRobot {
 
         pidDrive = new CknPidDrive(driveBase, xPid, yPid, turnPid);
         pidDrive.setStallTimeout(1.0);
+
+    }
+
+    public void startMode(RunMode runMode){
+        if(driveBase != null && runMode == RunMode.AUTO_MODE){
+            driveBase.setOdometryEnabled(true);
+        }
+    }
+
+    public void stopMode(RunMode runMode){
+
+
 
     }
 
