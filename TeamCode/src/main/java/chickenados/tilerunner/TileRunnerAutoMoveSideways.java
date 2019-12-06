@@ -27,6 +27,13 @@ public class TileRunnerAutoMoveSideways extends LinearOpMode{
         FRONT_RIGHT,
         BACK_LEFT,
         BACK_RIGHT,
+        GRAB_FOUNDATION,
+        MOVE_BACK,
+        RELEASE_FOUNDATION,
+        FRONT_LEFT_BACK,
+        FRONT_RIGHT_BACK,
+        BACK_LEFT_BACK,
+        BACK_RIGHT_BACK,
         END;
     }
 
@@ -83,8 +90,43 @@ public class TileRunnerAutoMoveSideways extends LinearOpMode{
                     case BACK_RIGHT:
                             event.reset();
                             robot.backRight.setTargetPosition(1000);
-                            sm.waitForEvent(event, State.END);
+                            sm.waitForEvent(event, State.GRAB_FOUNDATION);
                             break;
+                    case GRAB_FOUNDATION:
+                        event.reset();
+                        robot.foundationGrabber.goToPosition(1000, null, 1.0);
+                        sm.waitForEvent(event, State.END);
+                        break;
+                    case FRONT_LEFT_BACK:
+                        event.reset();
+                        robot.frontLeft.setTargetPosition(1000);
+                        robot.frontLeft.setPower(0.5);
+                        sm.waitForEvent(event, State.FRONT_RIGHT_BACK);
+                        break;
+                    case FRONT_RIGHT_BACK:
+                        event.reset();
+                        robot.frontRight.setTargetPosition(-1000);
+                        sm.waitForEvent(event, State.BACK_LEFT_BACK);
+                        break;
+                    case BACK_LEFT_BACK:
+                        event.reset();
+                        robot.backLeft.setTargetPosition(-1000);
+                        sm.waitForEvent(event, State.BACK_RIGHT_BACK);
+                        break;
+                    case BACK_RIGHT_BACK:
+                        event.reset();
+                        robot.backRight.setTargetPosition(1000);
+                        sm.waitForEvent(event, State.RELEASE_FOUNDATION);
+                        break;
+                    case RELEASE_FOUNDATION:
+                        event.reset();
+                        robot.foundationGrabber.goToPosition(50, null, 1.0);
+                        sm.waitForEvent(event,State.MOVE_BACK);
+                    case MOVE_BACK:
+                        event.reset();
+                        robot.pidDrive.driveDistanceTank(18,0,2,event);
+                        sm.waitForEvent(event, State.END);
+                        break;
                     case END:
                         event.reset();
                         sm.stop();

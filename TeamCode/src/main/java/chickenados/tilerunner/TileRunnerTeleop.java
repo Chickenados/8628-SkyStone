@@ -32,10 +32,11 @@ public class TileRunnerTeleop extends LinearOpMode {
                 robot.driveBase.setSpeed(TileRunnerInfo.PRECISION_SPEED);
             } else robot.driveBase.setSpeed(TileRunnerInfo.FULL_SPEED);
 
+            //stone grabber
             if(gamepad1.a){
                 robot.stoneGrabber.setPosition(0);
             } else if(gamepad1.b){
-                robot.stoneGrabber.setPosition(100);
+                robot.stoneGrabber.setPosition(104);
             }
 
             //Grabber Arm Control
