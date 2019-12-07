@@ -104,9 +104,9 @@ public class CknMecanumDriveBase extends CknSimpleDriveBase {
 
         poseDelta.x = xScale * CknUtil.average(
                 motorsState.motorPosDiffs[MotorType.FRONT_LEFT.value],
-                motorsState.motorPosDiffs[MotorType.FRONT_RIGHT.value],
-                -motorsState.motorPosDiffs[MotorType.BACK_LEFT.value],
-                -motorsState.motorPosDiffs[MotorType.BACK_RIGHT.value]);
+                motorsState.motorPosDiffs[MotorType.BACK_RIGHT.value],
+                -motorsState.motorPosDiffs[MotorType.FRONT_RIGHT.value],
+                -motorsState.motorPosDiffs[MotorType.BACK_LEFT.value]);
 
         return poseDelta;
     }
