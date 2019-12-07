@@ -39,10 +39,10 @@ public class Tilerunner extends CknRobot {
 
     CknBNO055IMU imu;
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor rearLeft;
-    DcMotor rearRight;
+    public DcMotor frontLeft;
+    public DcMotor frontRight;
+    public DcMotor rearLeft;
+    public DcMotor rearRight;
 
     //Grabber Arm subsystem
     CknMotor grabberArmMotor;

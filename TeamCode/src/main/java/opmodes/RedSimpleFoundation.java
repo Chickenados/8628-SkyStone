@@ -1,6 +1,7 @@
 package opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import chickenlib.opmode.CknOpMode;
 import chickenlib.opmode.CknRobot;
@@ -8,10 +9,13 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "Red Grab Foundation")
-public class RedGrabFoundation extends CknOpMode {
+@Autonomous(name = "Red Simple Foundation")
+public class RedSimpleFoundation extends CknOpMode {
 
-    private final String moduleName = "RedGrabFoundation";
+
+
+    private final String moduleName = "RedSimpleFoundation";
+
 
     private enum State{
         DRIVE_TO_FOUNDATION,
@@ -33,6 +37,7 @@ public class RedGrabFoundation extends CknOpMode {
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
         sm.start(State.DRIVE_TO_FOUNDATION);
+
     }
 
     @Override
@@ -70,7 +75,12 @@ public class RedGrabFoundation extends CknOpMode {
 
                     //Sideways slow drive to wall
                     //robot.driveBase.setSpeed(0.5);
-                    robot.pidDrive.setTarget(17, 0, 0, event, 5.0);
+                    //removing PID drive to test
+                    //robot.pidDrive.setTarget(17, 0, 0, event, 5.0);
+                    robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     sm.waitForSingleEvent(event, State.RELEASE_FOUNDATION);
                 case RELEASE_FOUNDATION:
