@@ -47,6 +47,10 @@ public class TilerunnerGrabberArm {
         straightUp(null, timeout);
     }
 
+    public void goToPosition(double target, CknEvent event, double timeout){
+        pidMotor.setTarget(target, event, timeout);
+    }
+
     public void manualControl(double power){
         pidMotor.setMotorPower(power);
     }
