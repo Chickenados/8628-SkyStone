@@ -53,6 +53,7 @@ public class RedGrabFoundation extends CknOpMode {
 
             switch (state){
                 case DRIVE_TO_FOUNDATION:
+                    event.clear();
 
                     // Sideways (X) drive to foundation
                     robot.pidDrive.setTarget(-17, 0, 0, event, 3.0);
@@ -61,6 +62,7 @@ public class RedGrabFoundation extends CknOpMode {
                     break;
                 case HOOK_FOUNDATION:
 
+                    event.clear();
                     robot.foundationGrabber.grab(event, 1.0);
 
                     sm.waitForSingleEvent(event, State.DRIVE_TO_WALL);
@@ -88,6 +90,7 @@ public class RedGrabFoundation extends CknOpMode {
                     sm.waitForSingleEvent(event, State.END);
                     break;
                 case END:
+                    event.clear();
                     robot.driveBase.stop();
                     sm.stop();
                     break;

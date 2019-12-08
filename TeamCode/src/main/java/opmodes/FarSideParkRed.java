@@ -62,7 +62,7 @@ public class FarSideParkRed extends CknOpMode {
                 case STRAFE:
 
                     robot.pidDrive.setTarget(20,0,0,event,3.0);
-                    sm.waitForSingleEvent(event, State.STRAFE);
+                    sm.waitForSingleEvent(event, State.END);
                     break;
 
                 case END:
