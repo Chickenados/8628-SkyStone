@@ -9,12 +9,12 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "redparkonly")
-public class redparkonly extends CknOpMode {
+@Autonomous(name = "ParkOnly")
+public class ParkOnly extends CknOpMode {
 
 
 
-    private final String moduleName = "redparkonly";
+    private final String moduleName = "ParkOnly";
 
 
     private enum State{
@@ -52,34 +52,34 @@ public class redparkonly extends CknOpMode {
 
             robot.dashboard.displayPrintf(4, "State: %s", state);
 
-                switch (state) {
-                    case MOVE_FORWARD:
+            switch (state) {
+                case MOVE_FORWARD:
 
-                        robot.pidDrive.setTarget(12,0,event,3.0);
-                        sm.waitForSingleEvent(event, State.END);
-                        break;
+                    robot.pidDrive.setTarget(-35,0,event,3.0);
+                    sm.waitForSingleEvent(event, State.END);
+                    break;
 
-                    case END:
-                        robot.driveBase.stop();
-                        sm.stop();
-                        break;
+                case END:
+                    robot.driveBase.stop();
+                    sm.stop();
+                    break;
 
-                }
             }
-
-        }
-
-        //ignore
-        @Override
-        public void startMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
-            robot.startMode(nextMode);
-        }
-
-        @Override
-        public void stopMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
-            robot.stopMode(prevMode);
         }
 
     }
+
+    //ignore
+    @Override
+    public void startMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
+        robot.startMode(nextMode);
+    }
+
+    @Override
+    public void stopMode(CknRobot.RunMode prevMode, CknRobot.RunMode nextMode){
+        robot.stopMode(prevMode);
+    }
+
+}
 
 
