@@ -9,12 +9,12 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "FarSidePark")
-public class FarSidePark extends CknOpMode {
+@Autonomous(name = "FarSideParkRed")
+public class FarSideParkRed extends CknOpMode {
 
 
 
-    private final String moduleName = "FarSidePark";
+    private final String moduleName = "FarSideParkRed";
 
 
     private enum State{
