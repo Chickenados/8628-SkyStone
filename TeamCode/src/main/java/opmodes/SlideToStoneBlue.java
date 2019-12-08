@@ -86,10 +86,12 @@ public class SlideToStoneBlue extends CknOpMode {
                         robot.stoneGrabber.setPosition(TilerunnerInfo.STONE_GRABBER_CLOSED_POS);
                         timer.set(2.0, event);
 
+
                         sm.waitForSingleEvent(event,State.STRAIGHT_UP);
                         break;
 
                     case STRAIGHT_UP:
+                        timer.set(6.0,event);
 
                         robot.grabberArm.lowPosition(event, 2.0);
                         sm.waitForSingleEvent(event,State.BACK_UP);
@@ -97,13 +99,13 @@ public class SlideToStoneBlue extends CknOpMode {
 
                     case BACK_UP:
 
-                        robot.pidDrive.setTarget(0,-11,-90,event,2.0);
-                        sm.waitForSingleEvent(event, State.END);
+                        robot.pidDrive.setTarget(0,-11,90,event,2.0);
+                        sm.waitForSingleEvent(event, State.DRIVE_TO_BRIDGE);
                         break;
 
                     case DRIVE_TO_BRIDGE:
 
-                        robot.pidDrive.setTarget(0,55,-90,event,3.0);
+                        robot.pidDrive.setTarget(0,-67,90,event,3.0);
                         sm.waitForSingleEvent(event, State.DROP);
                         break;
 
@@ -116,7 +118,7 @@ public class SlideToStoneBlue extends CknOpMode {
 
                     case PARK:
 
-                        robot.pidDrive.setTarget(0,-10,-135,event,1.0);
+                        robot.pidDrive.setTarget(0,-10,135,event,1.0);
                         sm.waitForSingleEvent(event, State.END);
                         break;
 

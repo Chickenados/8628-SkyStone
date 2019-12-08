@@ -44,7 +44,7 @@ public class     TilerunnerGrabberArm {
 
     //low position
     public void lowPosition(double timeout){
-        straightUp(null, timeout);
+        lowPosition(null, timeout);
     }
 
     public void lowPosition(CknEvent event, double timeout){
@@ -59,6 +59,16 @@ public class     TilerunnerGrabberArm {
     public void straightUp(CknEvent event, double timeout){
         pidMotor.setTarget(TilerunnerInfo.GRABBER_STRAIGHT_UP_ENCODER_COUNT, event, timeout);
     }
+
+    //second position
+    public void secondPosition(double timeout){
+        secondPosition(null, timeout);
+    }
+
+    public void secondPosition(CknEvent event, double timeout){
+        pidMotor.setTarget(TilerunnerInfo.GRABBER_SECOND_POSITION_ENCODER_COUNT, event, timeout);
+    }
+
 
     //go to position
     public void goToPosition(double target, CknEvent event, double timeout){
