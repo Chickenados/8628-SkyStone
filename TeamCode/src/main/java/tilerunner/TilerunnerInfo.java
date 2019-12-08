@@ -33,6 +33,7 @@ public class TilerunnerInfo {
     public static final int GRABBER_EXTENDED_ENCODER_COUNT = 2250;
     public static final int GRABBER_RETRACTED_ENCODER_COUNT = 0;
     public static final int GRABBER_STRAIGHT_UP_ENCODER_COUNT = 1000;
+    public static final int GRABBER_AUTO_HEIGHT_ENCODER_COUNT = 1600;
 
     //
     // Foundation Grabber/hook subsystem

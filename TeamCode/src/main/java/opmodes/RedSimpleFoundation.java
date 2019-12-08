@@ -68,22 +68,23 @@ public class RedSimpleFoundation extends CknOpMode {
 
                     robot.foundationGrabber.grab(event, 1.0);
 
+                    robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    robot.rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
                     sm.waitForSingleEvent(event, State.DRIVE_TO_WALL);
+
+
+
                     break;
                 case DRIVE_TO_WALL:
                     event.clear();
 
                     //Sideways slow drive to wall
                     //robot.driveBase.setSpeed(0.5);
-                    //removing PID drive to test
-                    //robot.pidDrive.setTarget(17, 0, 0, event, 5.0);
-                    robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    robot.rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                    sm.waitForSingleEvent(event, State.RELEASE_FOUNDATION);
-                case RELEASE_FOUNDATION:
+                             case RELEASE_FOUNDATION:
                     event.clear();
 
                     robot.foundationGrabber.release(event, 1.0);

@@ -7,9 +7,10 @@ import chickenlib.opmode.CknOpMode;
 import chickenlib.opmode.CknRobot;
 import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
+import chickenlib.util.CknTimer;
 import tilerunner.Tilerunner;
+import tilerunner.TilerunnerInfo;
 
-@Disabled
 @Autonomous(name = "Blank Autonomous")
 public class BlankAutonomous extends CknOpMode {
 
@@ -30,6 +31,7 @@ public class BlankAutonomous extends CknOpMode {
     Tilerunner robot;
     CknStateMachine<State> sm;
     CknEvent event;
+    CknTimer timer;
 
     //Called when init button is pressed
     @Override
@@ -38,6 +40,7 @@ public class BlankAutonomous extends CknOpMode {
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
+        timer = new CknTimer("autoTimer");
 
         //Set this to the first state in the program
         sm.start(State.EXTEND);
@@ -71,21 +74,22 @@ public class BlankAutonomous extends CknOpMode {
 
                     //Example sideways movement
                     //arguments: pidDrive.setTarget(xTarget, yTarget, turnTarget, event, timeout);
-                    robot.pidDrive.setTarget(0, 17, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, -17, 0, event, 3.0);
 
                     sm.waitForSingleEvent(event, State.GRAB);
                     break;
 
                 case GRAB:
 
-                    robot.foundationGrabber.grab(event,1.0);
+                    robot.stoneGrabber.setPosition(TilerunnerInfo.STONE_GRABBER_CLOSED_POS);
+                    timer.set(2.0, event);
 
                     sm.waitForSingleEvent(event,State.STRAIGHT_UP);
                     break;
 
                 case STRAIGHT_UP:
 
-                    robot.grabberArm.straightUp(event,2.0);
+                   robot.grabberArm.goToPosition(TilerunnerInfo.GRABBER_AUTO_HEIGHT_ENCODER_COUNT, event, 2.0);
 
                     sm.waitForSingleEvent(event,State.BACK_UP);
                     break;
