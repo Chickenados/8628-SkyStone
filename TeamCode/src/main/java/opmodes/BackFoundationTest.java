@@ -13,12 +13,12 @@ import tilerunner.Tilerunner;
 import tilerunner.TilerunnerGrabberArm;
 import tilerunner.TilerunnerInfo;
 
-@Autonomous(name = "Slide to stone red")
-public class SlideToStoneRed extends CknOpMode {
+@Autonomous(name = "BackFoundationTest")
+public class BackFoundationTest extends CknOpMode {
 
 
 
-    private final String moduleName = "slideToStoneRed";
+    private final String moduleName = "BackFoundationTest";
 
     private enum State{
         EXTEND,
@@ -43,7 +43,7 @@ public class SlideToStoneRed extends CknOpMode {
     //Called when init button is pressed
     @Override
     public void initRobot(){
-        robot = new Tilerunner(hardwareMap, telemetry, true);
+        robot = new Tilerunner(hardwareMap, telemetry, false);
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
@@ -62,7 +62,7 @@ public class SlideToStoneRed extends CknOpMode {
     @Override
     public void runContinuous(double elapsedTime){
 
-       State state = sm.checkReadyAndGetState();
+        State state = sm.checkReadyAndGetState();
 
         if(state == null){
             //robot.dashboard.displayPrintf(4, "State: null");
@@ -96,7 +96,7 @@ public class SlideToStoneRed extends CknOpMode {
 
                 case STRAIGHT_UP:
                     //robot.grabberArm.setMode(DcMotor.RunMode)
-                   //robot.grabberArm.lowPosition(event,3.0);
+                    //robot.grabberArm.lowPosition(event,3.0);
                     //robot.grabberArm.setMode(DcMotor)
                     //robot.grabberArm.goToPosition(1600,event, 3.0);
                     //robot.grabberArm

@@ -21,6 +21,7 @@ public class CknMotor {
     public CknMotor(String instanceName){
         this.instanceName = instanceName;
         this.motor = CknOpMode.getInstance().hardwareMap.dcMotor.get(instanceName);
+        this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         motorTaskObj = CknTaskMgr.getInstance().createTask(instanceName + ".motorTaskObj", this::motorOdometryTask);
     }

@@ -8,17 +8,17 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "Red Grab Foundation")
-public class RedGrabFoundation extends CknOpMode {
+@Autonomous(name = "FoundationRed")
+public class FoundationRed extends CknOpMode {
 
-    private final String moduleName = "RedGrabFoundation";
+    private final String moduleName = "FoundationRed";
 
     private enum State{
-        DRIVE_TO_FOUNDATION,
+        DRIVE_BACKWARDS,
         HOOK_FOUNDATION,
         DRIVE_TO_WALL,
         RELEASE_FOUNDATION,
-        PARK,
+        STRAFE_TO_PARK,
         END;
     }
 
@@ -28,11 +28,11 @@ public class RedGrabFoundation extends CknOpMode {
 
     @Override
     public void initRobot(){
-        robot = new Tilerunner(hardwareMap, telemetry, true);
+        robot = new Tilerunner(hardwareMap, telemetry, false);
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
-        sm.start(State.DRIVE_TO_FOUNDATION);
+        sm.start(State.DRIVE_BACKWARDS);
     }
 
     @Override
@@ -52,18 +52,18 @@ public class RedGrabFoundation extends CknOpMode {
             robot.dashboard.displayPrintf(4, "State: %s", state);
 
             switch (state){
-                case DRIVE_TO_FOUNDATION:
+                case DRIVE_BACKWARDS:
                     event.clear();
 
                     // Sideways (X) drive to foundation
-                    robot.pidDrive.setTarget(0, 40, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, 20, 0, event, 3.0);
 
                     sm.waitForSingleEvent(event, State.HOOK_FOUNDATION);
                     break;
                 case HOOK_FOUNDATION:
 
                     event.clear();
-                    robot.foundationGrabber.grab(event, 3.0);
+                    robot.foundationGrabber.grab(event, 1.0);
 
                     sm.waitForSingleEvent(event, State.DRIVE_TO_WALL);
                     break;
@@ -72,20 +72,25 @@ public class RedGrabFoundation extends CknOpMode {
 
                     //Sideways slow drive to wall
                     //robot.driveBase.setSpeed(0.5);
-                    robot.pidDrive.setTarget(0, 42, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, -20, 0, event, 5.0);
 
                     sm.waitForSingleEvent(event, State.RELEASE_FOUNDATION);
                 case RELEASE_FOUNDATION:
                     event.clear();
 
-                    robot.foundationGrabber.release(event, 3.0);
+                    robot.foundationGrabber.release(event, 1.0);
                     //robot.driveBase.setSpeed(1.0);
-                    sm.waitForSingleEvent(event, State.PARK);
 
-                case PARK:
-                    event.clear();
+
+
+
                     //Forward drive to park zone
-                    robot.pidDrive.setTarget(20,0,0,event,2.0);
+                    //robot.pidDrive.setTarget(-30, 0, event, 3.0);
+                    sm.waitForSingleEvent(event, State.STRAFE_TO_PARK);
+                case STRAFE_TO_PARK:
+                    event.clear();
+
+                    robot.pidDrive.setTarget(0,-30,0,event, 2.0);
 
                     sm.waitForSingleEvent(event, State.END);
                     break;

@@ -60,18 +60,25 @@ public class RedSimpleFoundation extends CknOpMode {
                 case DRIVE_TO_FOUNDATION:
 
                     // Sideways (X) drive to foundation
-                    robot.pidDrive.setTarget(-17, 0, 0, event, 3.0);
+                    robot.pidDrive.setTarget(-17, 0, 0, event, 5.0);
 
                     sm.waitForSingleEvent(event, State.HOOK_FOUNDATION);
                     break;
                 case HOOK_FOUNDATION:
 
-                    robot.foundationGrabber.grab(event, 1.0);
+                    robot.foundationGrabber.grab(event, 5.0);
+
 
                     robot.frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     robot.rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    robot.frontLeft.setTargetPosition(5000);
+
+                    // set left motor to 25% power. Movement will start.
+
+                    robot.frontLeft.setPower(0.25);
 
                     sm.waitForSingleEvent(event, State.DRIVE_TO_WALL);
 
@@ -84,10 +91,10 @@ public class RedSimpleFoundation extends CknOpMode {
                     //Sideways slow drive to wall
                     //robot.driveBase.setSpeed(0.5);
 
-                             case RELEASE_FOUNDATION:
+                case RELEASE_FOUNDATION:
                     event.clear();
 
-                    robot.foundationGrabber.release(event, 1.0);
+                    robot.foundationGrabber.release(event, 5.0);
                     //robot.driveBase.setSpeed(1.0);
 
 
