@@ -48,7 +48,7 @@ public class TilerunnerTeleop extends CknOpMode {
             robot.grabberArm.manualControl(-0.5);
         } else if(gamepad1.left_trigger != 0.0){
             robot.grabberArm.manualControl(0.5);
-        } else if(!robot.grabberArm.isPidActive() && robot.grabberArm.motorHasPower()){
+        } else if(!robot.grabberArm.isPidActive() && robot.grabberArm.motorHasPower() && gamepad1.left_trigger == 0.0 && gamepad1.right_trigger == 0.0 ){
             robot.grabberArm.manualControl(0.0);
         }
 
@@ -65,10 +65,18 @@ public class TilerunnerTeleop extends CknOpMode {
         }
 
         //Foundation Hook
-        if(gamepad1.x){
-            robot.foundationGrabber.release(1.0);
+        /*if(gamepad1.x){
+            robot.foundationGrabber.release(2.0);
         } else if(gamepad1.y){
-            robot.foundationGrabber.grab(1.0);
+            robot.foundationGrabber.grab(2.0);
+        }*/
+        //Manual Foundation Control
+        if(gamepad2.right_trigger > 0.1){
+            robot.foundationGrabber.manualControl(-gamepad2.right_trigger);
+        } else if(gamepad2.left_trigger > 0.1){
+            robot.foundationGrabber.manualControl(gamepad2.left_trigger);
+        } else if(!robot.foundationGrabber.isPidActive() && gamepad2.right_trigger <= 0.1 && gamepad2.left_trigger <= 0.1){
+            robot.grabberArm.manualControl(0.0);
         }
 
     }

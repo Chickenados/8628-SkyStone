@@ -15,8 +15,12 @@ public class TilerunnerFoundationGrabber {
         pidMotor.setHoldPosition(hold);
     }
 
+    public boolean isPidActive(){
+        return pidMotor.isActive();
+    }
+
     public void grab(CknEvent event, double timeout){
-        pidMotor.setTarget(TilerunnerInfo.FOUNDATION_HOOK_GRAB_POS, event, timeout);
+        pidMotor.setTarget(TilerunnerInfo.FOUNDATION_DOWN_POSITION, event, timeout);
     }
 
     public void grab(double timeout){
@@ -24,10 +28,19 @@ public class TilerunnerFoundationGrabber {
     }
 
     public void release(CknEvent event, double timeout){
-        pidMotor.setTarget(TilerunnerInfo.FOUNDATION_HOOK_RELEASE_POS, event, timeout);
+        pidMotor.setTarget(TilerunnerInfo.FOUNDATION_UP_POSITION, event, timeout);
     }
 
     public void release(double timeout){
         release(null, timeout);
+    }
+
+    public void manualControl(double power){
+        pidMotor.setMotorPower(power);
+    }
+
+    //telling foudndation grabber to stay
+    public void stopPid(){
+        pidMotor.stopPid();
     }
 }

@@ -5,8 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import chickenlib.hardware.CknMotor;
 import chickenlib.opmode.CknDashboard;
@@ -23,11 +27,14 @@ public class Tilerunner extends CknRobot {
 
     HardwareMap hwMap;
     boolean useVuforia;
+    boolean useTfod;
 
     //Vuforia Targets
     CknVuforia vuforia;
     CameraName webcameName;
     VuforiaVision vuforiaVision;
+    private VuforiaLocalizer.CameraDirection cameraDirection;
+    private TFObjectDetector tfod;
 
     //Drivetrain subsystem
     public CknDriveBase driveBase;
@@ -58,14 +65,34 @@ public class Tilerunner extends CknRobot {
     CknPidMotor foundationGrabberPidMotor;
     public TilerunnerFoundationGrabber foundationGrabber;
 
+    //capstone servo subsystem
+    public Servo capstoneServo;
+
+
     public CknDashboard dashboard;
 
     public Tilerunner(HardwareMap hwMap, Telemetry telemetry){
         this(hwMap, telemetry, false);
     }
 
-    public Tilerunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia){
+    public Tilerunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia) {this(hwMap, telemetry, useVuforia, false); }
+
+    public Tilerunner(HardwareMap hwMap, Telemetry telemetry, boolean useVuforia, boolean useTfod){
+
         this.hwMap = hwMap;
+        this.useVuforia = useVuforia;
+        this.useTfod = useTfod;
+
+        if(useTfod || useVuforia) {
+            vuforia = new CknVuforia(TilerunnerInfo.VUFORIA_KEY, hwMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", hwMap.appContext.getPackageName()),hwMap.get(WebcamName.class, TilerunnerInfo.WEBCAME_NAME), TilerunnerInfo.CAMERA_CHOICE);
+
+            initTfod();
+
+            if (tfod != null) {
+                tfod.activate();
+            }
+        }
 
         //Initialize Dashboard
         dashboard = CknDashboard.getInstance();
@@ -154,9 +181,27 @@ public class Tilerunner extends CknRobot {
         foundationGrabberPidMotor.setStalledTimeout(0.5);
         foundationGrabber = new TilerunnerFoundationGrabber(foundationGrabberPidMotor);
 
+        //
+        //Casptone Servo Subsystem
+        //
+        capstoneServo = hwMap.servo.get(TilerunnerInfo.CAPSTONE_SERVO_NAME);
+
 
     }
 
+
+
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = hwMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hwMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minimumConfidence = 0.8;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia.getLocalizer());
+        tfod.loadModelFromAsset(TilerunnerInfo.TFOD_MODEL_ASSET, TilerunnerInfo.LABEL_FIRST_ELEMENT, TilerunnerInfo.LABEL_SECOND_ELEMENT);
+    }
     public void startMode(RunMode runMode){
         if(driveBase != null && runMode == RunMode.AUTO_MODE){
             imu.setEnabled(true);

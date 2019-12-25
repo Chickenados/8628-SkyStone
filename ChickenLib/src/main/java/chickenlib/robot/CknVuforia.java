@@ -15,9 +15,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import chickenlib.opmode.CknDashboard;
 
 public class CknVuforia {
 
@@ -27,6 +31,7 @@ public class CknVuforia {
         public final boolean isObjectTarget;
         public final OpenGLMatrix fieldLocation;
         public VuforiaTrackables targetList = null;
+
 
         public TargetInfo(int index, String name, boolean isObjectTarget, OpenGLMatrix fieldLocation){
             this.index = index;
@@ -48,6 +53,8 @@ public class CknVuforia {
     private HashMap<String, TargetInfo> targetMap = new HashMap<>();
     private int numImageTargets = 0;
     private int numObjectTargets = 0;
+    private TFObjectDetector tfod;
+
 
     /*
      * Constructor for using Vuforia with built-in phone camera
@@ -79,6 +86,7 @@ public class CknVuforia {
         params.cameraName = webcameName;
 
         localizer = ClassFactory.getInstance().createVuforia(params);
+
     }
 
     public VuforiaLocalizer getLocalizer() {
@@ -126,7 +134,9 @@ public class CknVuforia {
         Vuforia.setHint(HINT.HINT_MAX_SIMULTANEOUS_OBJECT_TARGETS, numObjectTargets);
     }
 
-
+    public VuforiaLocalizer getGetLocalizer() {
+        return getLocalizer();
+    }
     public void setTrackingEnabled(boolean trackingEnabled){
 
         for(VuforiaTrackables targetList : targetLists){
@@ -140,6 +150,8 @@ public class CknVuforia {
         }
 
     }
+
+
 
     /**
      * This method creates a location matrix that can be used to relocate an object to its final location by rotating

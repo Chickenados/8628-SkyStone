@@ -17,6 +17,8 @@ public class RedGrabFoundation extends CknOpMode {
         DRIVE_TO_FOUNDATION,
         HOOK_FOUNDATION,
         DRIVE_TO_WALL,
+        GET_TO_CORNER,
+        TURN,
         RELEASE_FOUNDATION,
         PARK,
         END;
@@ -28,7 +30,7 @@ public class RedGrabFoundation extends CknOpMode {
 
     @Override
     public void initRobot(){
-        robot = new Tilerunner(hardwareMap, telemetry, true);
+        robot = new Tilerunner(hardwareMap, telemetry, false);
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
@@ -56,7 +58,7 @@ public class RedGrabFoundation extends CknOpMode {
                     event.clear();
 
                     // Sideways (X) drive to foundation
-                    robot.pidDrive.setTarget(0, 40, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, 30, 0, event, 3.0);
 
                     sm.waitForSingleEvent(event, State.HOOK_FOUNDATION);
                     break;
@@ -68,24 +70,38 @@ public class RedGrabFoundation extends CknOpMode {
                     sm.waitForSingleEvent(event, State.DRIVE_TO_WALL);
                     break;
                 case DRIVE_TO_WALL:
-                    event.clear();
 
+                    event.clear();
+                    //May need to add a motion downwards for foundation grabber maybe set power
                     //Sideways slow drive to wall
                     //robot.driveBase.setSpeed(0.5);
-                    robot.pidDrive.setTarget(0, 42, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, -38, 0, event, 3.0);
 
+                    sm.waitForSingleEvent(event, State.GET_TO_CORNER);
+                    //Look here
+                    break;
+
+                case GET_TO_CORNER:
+                    event.clear();
+                    robot.pidDrive.setTarget(20,0,0,event, 3.0);
+                    sm.waitForSingleEvent(event, State.TURN);
+                    break;
+
+                case TURN:
+                    event.clear();
+                    robot.pidDrive.setTarget(0,2,90,event, 3.0);
                     sm.waitForSingleEvent(event, State.RELEASE_FOUNDATION);
                 case RELEASE_FOUNDATION:
                     event.clear();
-
-                    robot.foundationGrabber.release(event, 3.0);
+                    robot.foundationGrabber.stopPid();
+                    robot.foundationGrabber.release(event, 5.0);
                     //robot.driveBase.setSpeed(1.0);
                     sm.waitForSingleEvent(event, State.PARK);
-
+                    //break;
                 case PARK:
                     event.clear();
-                    //Forward drive to park zone
-                    robot.pidDrive.setTarget(20,0,0,event,2.0);
+                    //Sideways drive to park zone.
+                    robot.pidDrive.setTarget(-100,0,0,event,30.0);
 
                     sm.waitForSingleEvent(event, State.END);
                     break;

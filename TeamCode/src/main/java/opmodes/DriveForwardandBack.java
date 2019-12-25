@@ -49,15 +49,29 @@ import tilerunner.Tilerunner;
             backRight = hardwareMap.dcMotor.get("backRight");
 
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
+            frontLeft.setTargetPosition(0);
+
+//            frontRight.setTargetPosition(0);
+
+            backLeft.setDirection(DcMotor.Direction.REVERSE);
+//            backLeft.setTargetPosition(0);
+
+//            backRight.setTargetPosition(0);
 
             // reset encoder count kept by left motor.
             frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            // set left motor to run to target encoder position and stop with brakes on.
+            // set each motor to run to target encoder position and stop with brakes on.
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // set right motor to run without regard to an encoder.
-            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            //frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             telemetry.addData("Mode", "waiting");
             telemetry.update();
@@ -69,14 +83,19 @@ import tilerunner.Tilerunner;
             telemetry.addData("Mode", "running");
             telemetry.update();
 
-            // set left motor to run to 5000 encoder counts.
+            // set left motor to run to 2000 encoder counts.
 
-            frontLeft.setTargetPosition(5000);
+            frontLeft.setTargetPosition(2000);
+//            frontRight.setTargetPosition(2000);
+//            backLeft.setTargetPosition(2000);
+//            backRight.setTargetPosition(2000);
 
-            // set both motors to 25% power. Movement will start.
+            // set all motors to 25% power. Movement will start.
 
             frontLeft.setPower(0.25);
             frontRight.setPower(0.25);
+            backLeft.setPower(0.25);
+            backRight.setPower(0.25);
 
             // wait while opmode is active and left motor is busy running to position.
 
@@ -92,6 +111,8 @@ import tilerunner.Tilerunner;
 
             frontLeft.setPower(0.0);
             frontRight.setPower(0.0);
+            backLeft.setPower(0.0);
+            backRight.setPower(0.0);
 
             // wait 5 sec so you can observe the final encoder position.
 
@@ -111,6 +132,8 @@ import tilerunner.Tilerunner;
 
             frontLeft.setPower(-0.25);
             frontRight.setPower(-0.25);
+            backLeft.setPower(-0.25);
+            backRight.setPower(-0.25);
 
             while (opModeIsActive() && frontLeft.getCurrentPosition() > 0)
             {
@@ -123,6 +146,8 @@ import tilerunner.Tilerunner;
 
             frontLeft.setPower(0.0);
             frontRight.setPower(0.0);
+            backLeft.setPower(0.0);
+            backRight.setPower(0.0);
 
             // wait 5 sec so you can observe the final encoder position.
 
