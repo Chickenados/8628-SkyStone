@@ -62,9 +62,8 @@ public class CknPidMotor {
      * @param power
      */
     public void setMotorPower(double power){
-        if(active){
-            stopPid();
-        }
+        if(active) stopPid(false); // StopMotor is false because we want to use the motor during manual control.
+
         motor.setPower(power);
     }
 
@@ -122,10 +121,12 @@ public class CknPidMotor {
     /**
      * Stops the pid action.
      */
-    public void stopPid(){
+    public void stopPid(boolean stopMotor){
         setTaskEnabled(false);
 
-        motor.setPower(0.0);
+        if(stopMotor) {
+            motor.setPower(0.0);
+        }
 
         if(pid != null){
             pid.reset();
@@ -149,7 +150,7 @@ public class CknPidMotor {
         if(stalled || expired || onTarget){
             //Stop the motor
             if(holdPosition) {
-                stopPid();
+                stopPid(true);
             }
 
             //Activate the event
@@ -164,7 +165,7 @@ public class CknPidMotor {
     }
 
     public void stopTask(CknTaskMgr.TaskType taskType, CknRobot.RunMode runMode){
-        stopPid();
+        stopPid(true);
     }
 
 }

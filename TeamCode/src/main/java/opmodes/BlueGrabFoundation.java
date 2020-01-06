@@ -8,8 +8,8 @@ import chickenlib.util.CknEvent;
 import chickenlib.util.CknStateMachine;
 import tilerunner.Tilerunner;
 
-@Autonomous(name = "Red Grab Foundation")
-public class RedGrabFoundation extends CknOpMode {
+@Autonomous(name = "Blue Grab Foundation")
+public class BlueGrabFoundation extends CknOpMode {
 
     private final String moduleName = "RedGrabFoundation";
 
@@ -84,7 +84,7 @@ public class RedGrabFoundation extends CknOpMode {
 
                 case GET_TO_CORNER:
                     event.clear();
-                    robot.pidDrive.setTarget(20,0,0,event, 3.0);
+                    robot.pidDrive.setTarget(-20,0,0,event, 3.0);
                     sm.waitForSingleEvent(event, State.BACK_UP);
                     break;
 
@@ -109,7 +109,7 @@ public class RedGrabFoundation extends CknOpMode {
                 case PARK:
                     event.clear();
                     //Sideways drive to park zone.
-                    robot.pidDrive.setTarget(-50,-20,0,event,30.0);
+                    robot.pidDrive.setTarget(50,-20,0,event,30.0);
 
                     sm.waitForSingleEvent(event, State.END);
                     break;

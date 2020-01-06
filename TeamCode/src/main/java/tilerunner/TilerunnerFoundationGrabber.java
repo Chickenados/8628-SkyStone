@@ -41,6 +41,6 @@ public class TilerunnerFoundationGrabber {
 
     //telling foudndation grabber to stay
     public void stopPid(){
-        pidMotor.stopPid();
+        pidMotor.stopPid(true);
     }
 }
