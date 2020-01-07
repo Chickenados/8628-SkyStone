@@ -90,7 +90,7 @@ public class RedGrabFoundation extends CknOpMode {
 
                 case BACK_UP:
                     event.clear();
-                    robot.pidDrive.setTarget(0,-20,0,event, 3.0);
+                    robot.pidDrive.setTarget(0,-15,0,event, 3.0);
                     sm.waitForSingleEvent(event, State.RELEASE_FOUNDATION);
                     break;
 
@@ -109,7 +109,7 @@ public class RedGrabFoundation extends CknOpMode {
                 case PARK:
                     event.clear();
                     //Sideways drive to park zone.
-                    robot.pidDrive.setTarget(-50,-20,0,event,30.0);
+                    robot.pidDrive.setTarget(-60,-20,0,event,30.0);
 
                     sm.waitForSingleEvent(event, State.END);
                     break;

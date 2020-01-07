@@ -129,7 +129,7 @@ public class CknPidMotor {
         }
 
         if(pid != null){
-            pid.reset();
+                pid.reset();
         }
 
     }
