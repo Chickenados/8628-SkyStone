@@ -21,8 +21,9 @@ public class CknMotor {
     public CknMotor(String instanceName){
         this.instanceName = instanceName;
         this.motor = CknOpMode.getInstance().hardwareMap.dcMotor.get(instanceName);
-        this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
+        this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);  //Anna changed this from FLOAT to BRAKE in hopes of fixing the grabber arm stutter during TeleOp Jan 6.20
+                                        //The change from FLOAT to BRAKE made arm worse.  Now we comment out entire line.  When entire line is commented out it works a bit better.
+        //Changed back to FLOAT once we got word from Nate he found the issue in TeleOp
         motorTaskObj = CknTaskMgr.getInstance().createTask(instanceName + ".motorTaskObj", this::motorOdometryTask);
     }
 
