@@ -83,7 +83,7 @@ public class TilerunnerTeleop extends CknOpMode {
         } else if(gamepad2.left_trigger > 0.1){
             robot.foundationGrabber.manualControl(gamepad2.left_trigger);
         } else if(!robot.foundationGrabber.isPidActive()){
-            robot.grabberArm.manualControl(0.0);
+            robot.foundationGrabber.manualControl(0.0);
         }
 
     }
