@@ -11,7 +11,7 @@ public class TestTeleOp extends LinearOpMode {
     DcMotor frontLeft;
     DcMotor frontRight;
     DcMotor rearLeft;
-
+    DcMotor rearRight;
     DcMotor armMotor;
 
     @Override
@@ -20,7 +20,7 @@ public class TestTeleOp extends LinearOpMode {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         rearLeft = hardwareMap.dcMotor.get("backLeft");
-       // rearRight = hardwareMap.dcMotor.get("backRight");
+        rearRight = hardwareMap.dcMotor.get("backRight");
 
         rearLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -35,7 +35,7 @@ public class TestTeleOp extends LinearOpMode {
             rearLeft.setPower(gamepad1.left_stick_y);
 
             frontRight.setPower(gamepad1.right_stick_y);
-         //   rearRight.setPower(gamepad1.right_stick_y);
+            rearRight.setPower(gamepad1.right_stick_y);
 
             if(gamepad1.left_trigger > 0.0){
                 armMotor.setPower(0.6);
