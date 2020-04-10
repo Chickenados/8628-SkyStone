@@ -35,7 +35,9 @@ import chickenlib.util.CknUtil;
  * This class provides methods for the callers to register/unregister cooperative multi-tasking tasks. It manages
  * these tasks and will work with the cooperative multi-tasking scheduler to run these tasks.
  */
-public class CknTaskMgr
+public class
+
+CknTaskMgr
 {
     private static final String moduleName = "CknTaskMgr";
     private static final CknDbgTrace globalTracer = CknDbgTrace.getGlobalTracer();

@@ -14,14 +14,18 @@ public class BlueGrabFoundation extends CknOpMode {
     private final String moduleName = "RedGrabFoundation";
 
     private enum State{
+        SIDE,
         DRIVE_TO_FOUNDATION,
         HOOK_FOUNDATION,
         DRIVE_TO_WALL,
         GET_TO_CORNER,
         BACK_UP,
-        TURN,
         RELEASE_FOUNDATION,
         PARK,
+        RESET,
+        DRIVE,
+        RESET_AGAIN,
+        MOVE,
         END;
     }
 
@@ -35,7 +39,7 @@ public class BlueGrabFoundation extends CknOpMode {
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
-        sm.start(State.DRIVE_TO_FOUNDATION);
+        sm.start(State.SIDE);
     }
 
     @Override
@@ -55,11 +59,19 @@ public class BlueGrabFoundation extends CknOpMode {
             robot.dashboard.displayPrintf(4, "State: %s", state);
 
             switch (state){
+                case SIDE:
+                    event.clear();
+
+                    // Sideways (X) drive to foundation
+                    robot.pidDrive.setTarget(-10, 0, 0, event, 3.0);
+
+                    sm.waitForSingleEvent(event, State.DRIVE_TO_FOUNDATION);
+                    break;
                 case DRIVE_TO_FOUNDATION:
                     event.clear();
 
                     // Sideways (X) drive to foundation
-                    robot.pidDrive.setTarget(0, 30, 0, event, 3.0);
+                    robot.pidDrive.setTarget(0, 28, 0, event, 3.0);
 
                     sm.waitForSingleEvent(event, State.HOOK_FOUNDATION);
                     break;
@@ -102,14 +114,42 @@ public class BlueGrabFoundation extends CknOpMode {
                 case RELEASE_FOUNDATION:
                     event.clear();
                     robot.foundationGrabber.stopPid();
-                    robot.foundationGrabber.release(event, 5.0);
+                    robot.foundationGrabber.release(event, 3.0);
                     //robot.driveBase.setSpeed(1.0);
                     sm.waitForSingleEvent(event, State.PARK);
                     //break;
                 case PARK:
                     event.clear();
                     //Sideways drive to park zone.
-                    robot.pidDrive.setTarget(50,-20,0,event,30.0);
+                    robot.pidDrive.setTarget(22,0,0,event,2.0);
+
+                    sm.waitForSingleEvent(event, State.RESET);
+                    break;
+                case RESET:
+                    event.clear();
+                    //Sideways drive to park zone.
+                    robot.pidDrive.setTarget(0,-10,0,event,2.0);
+
+                    sm.waitForSingleEvent(event, State.DRIVE);
+                    break;
+                case DRIVE:
+                    event.clear();
+                    //Sideways drive to park zone.
+                    robot.pidDrive.setTarget(20,0,0,event,2.0);
+
+                    sm.waitForSingleEvent(event, State.RESET_AGAIN);
+                    break;
+                case RESET_AGAIN:
+                    event.clear();
+                    //Sideways drive to park zone.
+                    robot.pidDrive.setTarget(0,-10,0,event,2.0);
+
+                    sm.waitForSingleEvent(event, State.MOVE);
+                    break;
+                case MOVE:
+                    event.clear();
+                    //Sideways drive to park zone.
+                    robot.pidDrive.setTarget(270,0,0,event,2.0);
 
                     sm.waitForSingleEvent(event, State.END);
                     break;

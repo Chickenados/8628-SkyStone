@@ -55,7 +55,7 @@ public class ParkOnly extends CknOpMode {
             switch (state) {
                 case MOVE_FORWARD:
 
-                    robot.pidDrive.setTarget(-35,0,event,3.0);
+                    robot.pidDrive.setTarget(-30.5,0,event,3.0);
                     sm.waitForSingleEvent(event, State.END);
                     break;
 
