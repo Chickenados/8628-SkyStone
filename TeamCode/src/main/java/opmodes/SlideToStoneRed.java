@@ -52,7 +52,7 @@ public class SlideToStoneRed extends CknOpMode {
     //Called when init button is pressed
     @Override
     public void initRobot(){
-        robot = new Tilerunner(hardwareMap, telemetry, true);
+        robot = new Tilerunner(hardwareMap, telemetry, false);
 
         event = new CknEvent(moduleName);
         sm = new CknStateMachine<>(moduleName);
