@@ -5,8 +5,10 @@
      So it won't ultimately be as empty as it might here appear to be :-) -->
 
 <!-- The package name here determines the package for your R class and your BuildConfig class -->
+<!--changed package name from chickenlib to com.chickenlib -->
 <manifest
-    package="chickenlib"
+    package="com.chickenlib"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
     <application/>
 </manifest>

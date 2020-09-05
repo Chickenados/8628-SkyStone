@@ -27,7 +27,7 @@ TestBot {
         backRight = hwMap.dcMotor.get("backRight");
         //grabberRotater = hwMap.servo.get("grabberRotater");
 
-        grabberPivot = hwMap.dcMotor.get("grabberPivot");
+        //grabberPivot = hwMap.dcMotor.get("grabberPivot");
         //Andy Mark motors need to be reversed
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
