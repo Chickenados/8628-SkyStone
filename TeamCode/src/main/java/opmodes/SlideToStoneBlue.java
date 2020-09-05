@@ -87,9 +87,9 @@ public class SlideToStoneBlue extends CknOpMode {
                         timer.set(2.0, event);
 
 
-                        sm.waitForSingleEvent(event,State.STRAIGHT_UP);
+                        sm.waitForSingleEvent(event,State.BACK_UP);
                         break;
-
+//SKIPPED STRAIGHT UP 1/9/20
                     case STRAIGHT_UP:
                         timer.set(6.0,event);
 
