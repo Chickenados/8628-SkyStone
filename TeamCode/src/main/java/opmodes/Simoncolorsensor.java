@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @Autonomous (name = "Simoncolorsensor")
 public class Simoncolorsensor extends LinearOpMode {
 
     DcMotor leftWheel;
     DcMotor rightWheel;
-
+    
     @Override
     public void runOpMode() throws InterruptedException {
 
