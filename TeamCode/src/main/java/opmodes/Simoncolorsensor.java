@@ -11,17 +11,30 @@ public class Simoncolorsensor extends LinearOpMode {
 
     DcMotor leftWheel;
     DcMotor rightWheel;
-    
+    ColorSensor colorSensor;
+
     @Override
     public void runOpMode() throws InterruptedException {
 
+
+        color_sensor = hardwareMap.colorSensor.get("colorSensor");
         leftWheel = hardwareMap.dcMotor.get("frontLeft");
         rightWheel = hardwareMap.dcMotor.get("frontRight");
         leftWheel.setDirection(DcMotor.Direction.REVERSE);
+        color_sensor.enableLed(true);
 
         waitForStart();
 
-        leftWheel.setPower(1);
+        int colorSensed = colorSensor.argb();
+
+        if (colorSensed >= 330 && colorSensed <= 360) {
+                leftWheel.setPower(1);
+                rightWheel.setPower(1);
+                sleep(2000);
+                rightWheel.setPower(0);
+                leftWheel.setPower(0);
+        }
+        /*leftWheel.setPower(1);
         rightWheel.setPower(1);
 
         sleep(2000);
@@ -33,7 +46,7 @@ public class Simoncolorsensor extends LinearOpMode {
 
         leftWheel.setPower(1);
         rightWheel.setPower(-1);
-
+        */
 
     }
 }
