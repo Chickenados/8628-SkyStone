@@ -152,12 +152,12 @@ public class CknTestBot extends CknRobot {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         //Use only if using phone camera
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+       //parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
 
         parameters.vuforiaLicenseKey = CknTestBotInfo.VUFORIA_KEY;
 
         //USE FOR WEBCAM
-        //parameters.cameraName = hwMap.get(WebcamName.class, CknTestBotInfo.WEBCAME_NAME);
+        parameters.cameraName = hwMap.get(WebcamName.class, CknTestBotInfo.WEBCAME_NAME);
 
 
 

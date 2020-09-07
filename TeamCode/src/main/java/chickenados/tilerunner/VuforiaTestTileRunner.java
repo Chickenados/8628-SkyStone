@@ -31,7 +31,7 @@ public class VuforiaTestTileRunner extends LinearOpMode{
                 CknUtil.CknLoopCounter.getInstance().loop++;
                 CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
 
-                pose = robot.getSkystonePose();
+                //pose = robot.getSkystonePose();
 
                 if(pose != null) {
                     robot.dashboard.setLine(1, "X: " + pose.x + " Y: " + pose.y);
