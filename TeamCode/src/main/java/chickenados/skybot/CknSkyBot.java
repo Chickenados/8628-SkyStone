@@ -205,7 +205,8 @@ public class CknSkyBot extends CknRobot {
 
         webcameName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
         // Set this int to -1 if you want to disable the camera monitor.
-        int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
+                "id", hwMap.appContext.getPackageName());
 
         vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName, BACK);
 

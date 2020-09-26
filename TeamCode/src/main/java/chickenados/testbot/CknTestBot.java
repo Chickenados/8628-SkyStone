@@ -146,7 +146,7 @@ public class CknTestBot extends CknRobot {
 
     private void initVuforia(){
 
-      //  int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
 
         // Init Vuforia
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
