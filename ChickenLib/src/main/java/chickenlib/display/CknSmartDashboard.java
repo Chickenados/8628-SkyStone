@@ -1,7 +1,7 @@
 package chickenlib.display;
 
-import android.graphics.Paint;
-import android.widget.TextView;
+//import android.graphics.Paint;
+//import android.widget.TextView;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -11,7 +11,7 @@ import chickenlib.CknTaskManager;
 import chickenlib.logging.CknDbgLog;
 import chickenlib.util.CknUtil;
 
-public class CknSmartDashboard implements CknTaskManager.Task {
+public class CknSmartDashboard<TextView, Paint> implements CknTaskManager.Task {
 
     public static class Parameters {
         public int displayWidth = 1080;
@@ -89,7 +89,7 @@ public class CknSmartDashboard implements CknTaskManager.Task {
         }
         telemetry.update();
     }
-
+/*
     public void setTextView(TextView textView){
         this.textView = textView;
         this.paint = textView.getPaint();
@@ -97,13 +97,14 @@ public class CknSmartDashboard implements CknTaskManager.Task {
 
     public String alignRight(String message){
         if(paint != null){
-            int padding = Math.round(paint.measureText(" "));
+            int padding;
+            padding = Math.round(paint.measureText(" "));
         }
         CknDbgLog.msg(CknDbgLog.Priority.WARN, "Cannot align text without TextView!");
         return message;
 
     }
-
+*/
     public void setTaskEnabled(boolean enabled){
         if(enabled){
             CknTaskManager.getInstance().registerTask(this, CknTaskManager.TaskType.PRECONTINUOUS);

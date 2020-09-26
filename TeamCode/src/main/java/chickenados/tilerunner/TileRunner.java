@@ -173,11 +173,11 @@ public class TileRunner extends CknRobot {
 
         webcameName = hwMap.get(WebcamName.class, CknSkyBotInfo.WEBCAME_NAME);
         // Set this int to -1 if you want to disable the camera monitor.
-        int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
+      /*  int cameraMonitorViewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
                 "id", hwMap.appContext.getPackageName());
 
         vuforia = new CknVuforia(CknSkyBotInfo.VUFORIA_KEY, cameraMonitorViewID, webcameName, BACK);
-
+*/
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
         phoneYRotate = CknSkyBotInfo.CAMERA_CHOICE == BACK ? -90.0f : 90.0f;
 

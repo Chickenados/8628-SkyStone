@@ -1,6 +1,6 @@
 package chickenlib.sensor;
 
-import android.provider.ContactsContract;
+//import android.provider.ContactsContract;
 
 import chickenlib.logging.CknDbgLog;
 import chickenlib.util.CknData;
