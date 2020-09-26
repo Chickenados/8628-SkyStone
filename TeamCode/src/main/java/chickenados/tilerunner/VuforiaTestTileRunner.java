@@ -31,12 +31,16 @@ public class VuforiaTestTileRunner extends LinearOpMode{
                 CknUtil.CknLoopCounter.getInstance().loop++;
                 CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.PRECONTINUOUS);
 
-                //pose = robot.getSkystonePose();
+                pose = robot.getSkystonePose();
 
                 if(pose != null) {
                     robot.dashboard.setLine(1, "X: " + pose.x + " Y: " + pose.y);
-                    robot.pidDrive.driveDistanceTank(-4, 0, 2, null);
-                } else robot.pidDrive.driveDistanceTank(-4, 90, 2, null);
+                    //robot.pidDrive.driveDistanceTank(-4, 0, 2, null);
+                    //robot.pidDrive.driveDistanceTank(-4,0,2, );
+                    robot.pidDrive.setTarget(-4,0,0);
+                    
+                } //else robot.pidDrive.driveDistanceTank(-4, 90, 2, null);
+                else robot.pidDrive.setTarget(-4,0, 90);
 
 
                 CknTaskManager.getInstance().executeTasks(CknTaskManager.TaskType.POSTCONTINUOUS);
